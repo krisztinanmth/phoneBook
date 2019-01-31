@@ -65,7 +65,6 @@ public class Contact {
 
   @Override
   public String toString() {
-    String formatted = String.format("%s %s birth-date: %s phone: %s address: %s", firstName, lastName, dateOfBirth, phoneNumber, address.toString());
-    return formatted;
+    return firstName + " " + lastName + " " + dateOfBirth + " " + phoneNumber + " " + address.toString();
   }
 }
