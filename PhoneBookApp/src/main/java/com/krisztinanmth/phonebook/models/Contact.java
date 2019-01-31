@@ -62,4 +62,10 @@ public class Contact {
   public void setAddress(List<Address> address) {
     this.address = address;
   }
+
+  @Override
+  public String toString() {
+    String formatted = String.format("%s %s birth-date: %s phone: %s address: %s", firstName, lastName, dateOfBirth, phoneNumber, address.toString());
+    return formatted;
+  }
 }

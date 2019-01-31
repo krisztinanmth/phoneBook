@@ -48,4 +48,10 @@ public class Address {
   public void setStreet(String street) {
     this.street = street;
   }
+
+  @Override
+  public String toString() {
+    String formatted = String.format("%s, %s, s%, s%", country, zipCode, city, street);
+    return formatted;
+  }
 }
