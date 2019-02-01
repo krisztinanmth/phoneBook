@@ -1,30 +1,32 @@
 package com.krisztinanmth.phonebook.services;
 
+import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.boot.json.JsonParser;
+import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Service
 public class ContactServiceImpl implements ContactService {
-
-  private List<Contact> contactList;
   private JSONParser parser;
+  private List<Contact> contacts;
 
   public ContactServiceImpl() {
-    contactList = new ArrayList<>();
+    contacts = new ArrayList<>();
   }
 
   public ContactServiceImpl(String path) {
-    this();
+    this();                            /////// !!!!!!!!!!!!!!!
     parser = new JSONParser();
     readFromJSON(path);
   }
@@ -37,23 +39,23 @@ public class ContactServiceImpl implements ContactService {
 
       for (Object o : jsonArray) {
         JSONObject jo = (JSONObject) o;
-        contactList.add(createContactFromJSONOBject(jo));
+        contacts.add(createContactFromJSONObject(jo));
       }
-    } catch (ParseException e) {
-      e.printStackTrace();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (ParseException e) {
+      e.printStackTrace();
     }
   }
 
-  private Contact createContactFromJSONOBject(JSONObject jo) {
+  private Contact createContactFromJSONObject(JSONObject jo) {
     String firstName = (String) jo.get("firstName");
     String lastName = (String) jo.get("lastName");
     String dateOfBirth = (String) jo.get("dateOfBirth");
     List<String> phoneNumber = (List<String>) jo.get("phoneNumber");
-    List<String> addresses = new ArrayList<>();
+    List<Address> addresses = new ArrayList<>();
 
     JSONArray addressList = (JSONArray) jo.get("address");
     for (Object ad : addressList) {
@@ -62,15 +64,25 @@ public class ContactServiceImpl implements ContactService {
       address.setZipCode((String) ((JSONObject) ad).get("zipCode"));
       address.setCity((String) ((JSONObject) ad).get("city"));
       address.setStreet((String) ((JSONObject) ad).get("street"));
-      addresses.add(String.valueOf(address));
+      addresses.add(address);
     }
-    return new Contact(firstName, lastName, dateOfBirth, phoneNumber, addressList);
+    return new Contact(firstName, lastName, dateOfBirth, phoneNumber, addresses);
   }
 
-  @Override
   public void showAllFirstNames() {
-    for (Contact contact : contactList) {
+    for (Contact contact : contacts) {
       System.out.println(contact.toString());
     }
   }
+
+  @Override
+  public List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException {
+    if (firstName == null || "".equals(firstName)) {
+      throw new FirstNameNotFoundException("First name was not found by given parameters.");
+    }
+    return contacts.stream()
+      .filter(contact -> contact.getFirstName().equals(firstName))
+      .collect(Collectors.toList());
+  }
+
 }
