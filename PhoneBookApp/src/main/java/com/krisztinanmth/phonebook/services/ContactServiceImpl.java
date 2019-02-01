@@ -27,7 +27,7 @@ public class ContactServiceImpl implements ContactService {
   }
 
   public ContactServiceImpl(String path) {
-    this();                            /////// !!!!!!!!!!!!!!!
+    this();
     parser = new JSONParser();
     readFromJSON(path);
   }
@@ -107,5 +107,4 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
-
 }
