@@ -19,12 +19,6 @@ class ContactServiceImplTest {
 
   @Test
   void findByFirstName_withExistingName() {
-//    List<Contact> contactList = new ArrayList<>();
-//    List<String> phoneNumbers = new ArrayList<>();
-//    String phone = "1-202-555-0144";
-//    phoneNumbers.add(phone);
-//
-//    contactList.add(new Contact("Gary", "Fleming", "19620620", phoneNumbers, Arrays.asList(new Address("Connecticut", "06103", "Hartford", "351 Red Bud Lane"))));
     try {
       assertEquals(1, contactService.findByFirstName("Gary").size());
     } catch (FirstNameNotFoundException e) {
@@ -35,9 +29,10 @@ class ContactServiceImplTest {
   @Test
   void findByFirstName_withNonExistingName() {
     try {
-      assertEquals(0, contactService.findByFirstName("Kriszta").size());
+      contactService.findByFirstName("Kriszta");
+      fail();
     } catch (FirstNameNotFoundException e) {
-      e.printStackTrace();
+      assertThat(FirstNameNotFoundException.class);
     }
   }
 

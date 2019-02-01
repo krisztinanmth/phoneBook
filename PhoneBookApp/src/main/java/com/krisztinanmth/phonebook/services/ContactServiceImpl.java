@@ -78,11 +78,18 @@ public class ContactServiceImpl implements ContactService {
   @Override
   public List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException {
     if (firstName == null || "".equals(firstName)) {
-      throw new FirstNameNotFoundException("First name was not found by given parameters.");
+      throw new FirstNameNotFoundException("First name was not given.");
     }
-    return contacts.stream()
+
+    List<Contact> contacts = this.contacts.stream()
       .filter(contact -> contact.getFirstName().equals(firstName))
       .collect(Collectors.toList());
+
+    if (contacts.size() == 0) {
+      throw new FirstNameNotFoundException("First name was not found by given parameters.");
+    }
+
+    return contacts;
   }
 
   @Override
