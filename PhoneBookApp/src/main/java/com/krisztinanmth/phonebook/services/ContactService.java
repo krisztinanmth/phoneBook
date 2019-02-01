@@ -9,4 +9,5 @@ public interface ContactService {
 
   void showAllFirstNames();
   List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
+  List<Contact> findByAddress(String ad);
 }

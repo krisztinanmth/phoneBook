@@ -85,4 +85,13 @@ public class ContactServiceImpl implements ContactService {
       .collect(Collectors.toList());
   }
 
+  @Override
+  public List<Contact> findByAddress(String ad) {
+    return contacts.stream()
+      .filter(contact -> contact.getAddress()
+        .stream()
+        .allMatch(address -> address.getCountry().equals(ad) ||address.getZipCode().equals(ad) || address.getCity().equals(ad) || address.getStreet().equals(ad)))
+      .collect(Collectors.toList());
+  }
+
 }
