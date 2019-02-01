@@ -1,5 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
+import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
@@ -77,28 +78,34 @@ public class ContactServiceImpl implements ContactService {
 
   @Override
   public List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException {
-    if (firstName == null || "".equals(firstName)) {
-      throw new FirstNameNotFoundException("First name was not given.");
-    }
+    if (firstName == null || "".equals(firstName))
+      throw new FirstNameNotFoundException("First name was not provided.");
 
     List<Contact> contacts = this.contacts.stream()
       .filter(contact -> contact.getFirstName().equals(firstName))
       .collect(Collectors.toList());
 
-    if (contacts.size() == 0) {
+    if (contacts.size() == 0)
       throw new FirstNameNotFoundException("First name was not found by given parameters.");
-    }
 
     return contacts;
   }
 
   @Override
-  public List<Contact> findByAddress(String ad) {
-    return contacts.stream()
+  public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
+    if (ad == null || "".equals(ad))
+      throw new AddressNotFoundException("Address was not provided.");
+
+    List<Contact> contacts = this.contacts.stream()
       .filter(contact -> contact.getAddress()
         .stream()
-        .allMatch(address -> address.getCountry().equals(ad) ||address.getZipCode().equals(ad) || address.getCity().equals(ad) || address.getStreet().equals(ad)))
+        .allMatch(address -> address.getCountry().equals(ad) || address.getZipCode().equals(ad) || address.getCity().equals(ad) || address.getStreet().equals(ad)))
       .collect(Collectors.toList());
+
+    if (contacts.size() == 0)
+      throw new AddressNotFoundException("Address was not found by given parameters.");
+
+    return contacts;
   }
 
 }

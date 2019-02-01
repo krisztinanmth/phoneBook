@@ -1,5 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
+import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.models.Contact;
 
@@ -9,5 +10,5 @@ public interface ContactService {
 
   void showAllFirstNames();
   List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
-  List<Contact> findByAddress(String ad);
+  List<Contact> findByAddress(String ad) throws AddressNotFoundException;
 }
