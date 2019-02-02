@@ -1,6 +1,7 @@
 package com.krisztinanmth.phonebook.services;
 
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,9 +39,8 @@ class ContactServiceImplTest {
 
   @Test
   void findByFirstName_withoutName() {
-
     try {
-      contactService.findByFirstName("").size();
+      contactService.findByFirstName("");
       fail();
     } catch (FirstNameNotFoundException e) {
       assertThat(FirstNameNotFoundException.class);
@@ -49,12 +49,50 @@ class ContactServiceImplTest {
 
   @Test
   void findByFirstName_withNull() {
-
     try {
-      contactService.findByFirstName(null).size();
+      contactService.findByFirstName(null);
       fail();
     } catch (FirstNameNotFoundException e) {
       assertThat(FirstNameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByLastName_withExistingName() {
+    try {
+      assertEquals(1, contactService.findByLastName("Cunningham").size());
+    } catch (LastNameNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  void findByLastName_withNonExistingName() {
+    try {
+      contactService.findByLastName("Kriszta");
+      fail();
+    } catch (LastNameNotFoundException e) {
+      assertThat(LastNameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByLastName_withoutName() {
+    try {
+      contactService.findByLastName("");
+      fail();
+    } catch (LastNameNotFoundException e) {
+      assertThat(LastNameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByLastName_withNull() {
+    try {
+      contactService.findByLastName(null);
+      fail();
+    } catch (LastNameNotFoundException e) {
+      assertThat(LastNameNotFoundException.class);
     }
   }
 }
