@@ -2,10 +2,14 @@ package com.krisztinanmth.phonebook.services;
 
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.naming.NameNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -134,6 +138,43 @@ class ContactServiceImplTest {
       fail();
     } catch (NameNotFoundException e) {
       assertThat(NameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByPhoneNumber_withExistingNumber() {
+    List<String> phoneNums = new ArrayList<>();
+    phoneNums.add("1-202-555-0164");
+
+    try {
+      assertEquals(1, contactService.findByPhoneNumber(phoneNums).size());
+    } catch (PhoneNumberNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  void findByPhoneNumber_withNonExistingNumber() {
+    List<String> wrongNums = new ArrayList<>();
+    wrongNums.add("06-70-600-7479");
+
+    try {
+      contactService.findByPhoneNumber(wrongNums);
+      fail();
+    } catch (PhoneNumberNotFoundException e) {
+      assertThat(PhoneNumberNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByPhoneNumber_withEmptyList() {
+    List<String> emptyList = new ArrayList<>();
+
+    try {
+      contactService.findByPhoneNumber(emptyList);
+      fail();
+    } catch (PhoneNumberNotFoundException e) {
+      assertThat(PhoneNumberNotFoundException.class);
     }
   }
 }
