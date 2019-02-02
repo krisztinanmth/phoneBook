@@ -39,6 +39,10 @@ public class Contact {
     this.lastName = lastName;
   }
 
+  public String getName() {
+    return firstName + " " + lastName;
+  }
+
   public String getDateOfBirth() {
     return dateOfBirth;
   }

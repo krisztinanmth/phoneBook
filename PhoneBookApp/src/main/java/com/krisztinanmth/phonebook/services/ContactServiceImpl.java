@@ -68,7 +68,7 @@ public class ContactServiceImpl implements ContactService {
       throw new NameNotFoundException("No last name or first name was provided.");
 
     List<Contact> contacts = this.contacts.stream()
-      .filter(contact -> contact.getFirstName().equals(name) || contact.getLastName().equals(name))
+      .filter(contact -> contact.getFirstName().equals(name) || contact.getLastName().equals(name) || contact.getName().equals(name))
       .collect(Collectors.toList());
 
     if (contacts.size() == 0)
@@ -76,6 +76,10 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
+
+  /**
+   * - Filter by phone number: Support searching contacts by their phone number
+   */
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
