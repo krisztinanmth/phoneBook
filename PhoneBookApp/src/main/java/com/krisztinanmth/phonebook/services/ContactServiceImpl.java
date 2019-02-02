@@ -3,6 +3,7 @@ package com.krisztinanmth.phonebook.services;
 import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,21 +66,34 @@ public class ContactServiceImpl implements ContactService {
   @Override
   public List<Contact> findByName(String name) throws NameNotFoundException {
     if (name == null || "".equals(name))
-      throw new NameNotFoundException("No last name or first name was provided.");
+      throw new NameNotFoundException("No name was provided.");
 
     List<Contact> contacts = this.contacts.stream()
       .filter(contact -> contact.getFirstName().equals(name) || contact.getLastName().equals(name) || contact.getName().equals(name))
       .collect(Collectors.toList());
 
     if (contacts.size() == 0)
-      throw new NameNotFoundException("Name was not found with given parameters.");
+      throw new NameNotFoundException("No contact was found with given name parameters.");
 
     return contacts;
   }
 
-  /**
-   * - Filter by phone number: Support searching contacts by their phone number
-   */
+
+  @Override
+  public List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException {
+    if (phoneNums.size() == 0)
+      throw new PhoneNumberNotFoundException("No phone-number was provided");
+
+    List<Contact> contacts = this.contacts.stream()
+      .filter(contact -> contact.getPhoneNumber().equals(phoneNums))
+      .collect(Collectors.toList());
+
+    if (contacts.size() == 0)
+      throw new PhoneNumberNotFoundException("No contact was found with given phone-number parameters.");
+
+    return contacts;
+  }
+
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
@@ -93,7 +107,7 @@ public class ContactServiceImpl implements ContactService {
       .collect(Collectors.toList());
 
     if (contacts.size() == 0)
-      throw new AddressNotFoundException("Address was not found with given parameters.");
+      throw new AddressNotFoundException("No contact was found with given address parameters.");
 
     return contacts;
   }
