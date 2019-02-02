@@ -15,12 +15,14 @@ public class PhoneBookApplication {
 
   @Autowired
   public PhoneBookApplication() {
-    this.contactService = new ContactServiceImpl("src/main/resources/contacts.json");
+    this.contactService = new ContactServiceImpl();
   }
 
   public static void main(String[] args) {
     SpringApplication.run(PhoneBookApplication.class, args);
-    contactService.showAllFirstNames();
+
+    contactService.showAllContacts();
+
     try {
       System.out.println(contactService.findByFirstName("Gary"));
     } catch (FirstNameNotFoundException e) {
@@ -32,21 +34,25 @@ public class PhoneBookApplication {
     } catch (FirstNameNotFoundException e) {
       e.printStackTrace();
     }
+
     try {
       System.out.println(contactService.findByAddress("351 Red Bud Lane"));
     } catch (AddressNotFoundException e) {
       e.printStackTrace();
     }
+
     try {
       System.out.println(contactService.findByAddress(""));
     } catch (AddressNotFoundException e) {
       e.printStackTrace();
     }
+
     try {
       System.out.println(contactService.findByAddress("3 Andrassy"));
     } catch (AddressNotFoundException e) {
       e.printStackTrace();
     }
+
     try {
       System.out.println(contactService.findByAddress(null));
     } catch (AddressNotFoundException e) {

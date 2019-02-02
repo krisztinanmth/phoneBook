@@ -14,7 +14,7 @@ class ContactServiceImplTest {
 
   @Autowired
   public ContactServiceImplTest() {
-    this.contactService = new ContactServiceImpl("src/main/resources/contacts.json");
+    contactService = new ContactServiceImpl();
   }
 
   @Test

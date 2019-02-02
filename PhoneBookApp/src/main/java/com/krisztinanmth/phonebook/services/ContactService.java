@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ContactService {
 
-  void showAllFirstNames();
+  void showAllContacts();
   List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
   List<Contact> findByAddress(String ad) throws AddressNotFoundException;
 }
