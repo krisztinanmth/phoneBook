@@ -5,6 +5,8 @@ import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.naming.NameNotFoundException;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -93,6 +95,45 @@ class ContactServiceImplTest {
       fail();
     } catch (LastNameNotFoundException e) {
       assertThat(LastNameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByName_withExistingName() {
+    try {
+      assertEquals(1, contactService.findByName("Wilkinson").size());
+    } catch (NameNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  void findByName_withNonExistingName() {
+    try {
+      contactService.findByName("Kriszta");
+      fail();
+    } catch (NameNotFoundException e) {
+      assertThat(NameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByName_withoutName() {
+    try {
+      contactService.findByName("");
+      fail();
+    } catch (NameNotFoundException e) {
+      assertThat(NameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByName_withNull() {
+    try {
+      contactService.findByName(null);
+      fail();
+    } catch (NameNotFoundException e) {
+      assertThat(NameNotFoundException.class);
     }
   }
 }
