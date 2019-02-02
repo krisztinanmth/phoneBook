@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import javax.naming.NameNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class ContactServiceImpl implements ContactService {
       .collect(Collectors.toList());
 
     if (contacts.size() == 0)
-      throw new FirstNameNotFoundException("First name was not found by given parameters.");
+      throw new FirstNameNotFoundException("First name was not found with given parameters.");
 
     return contacts;
   }
@@ -56,11 +57,25 @@ public class ContactServiceImpl implements ContactService {
       .collect(Collectors.toList());
 
     if (contacts.size() == 0)
-      throw new LastNameNotFoundException("Last name was not found by given parameters");
+      throw new LastNameNotFoundException("Last name was not found with given parameters");
 
     return contacts;
   }
 
+  @Override
+  public List<Contact> findByName(String name) throws NameNotFoundException {
+    if (name == null || "".equals(name))
+      throw new NameNotFoundException("No last name or first name was provided.");
+
+    List<Contact> contacts = this.contacts.stream()
+      .filter(contact -> contact.getFirstName().equals(name) || contact.getLastName().equals(name))
+      .collect(Collectors.toList());
+
+    if (contacts.size() == 0)
+      throw new NameNotFoundException("Name was not found with given parameters.");
+
+    return contacts;
+  }
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
@@ -74,7 +89,7 @@ public class ContactServiceImpl implements ContactService {
       .collect(Collectors.toList());
 
     if (contacts.size() == 0)
-      throw new AddressNotFoundException("Address was not found by given parameters.");
+      throw new AddressNotFoundException("Address was not found with given parameters.");
 
     return contacts;
   }
