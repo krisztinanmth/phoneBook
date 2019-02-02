@@ -2,6 +2,7 @@ package com.krisztinanmth.phonebook.services;
 
 import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,22 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
+
+  @Override
+  public List<Contact> findByLastName(String lastName) throws LastNameNotFoundException {
+    if (lastName == null || "".equals(lastName))
+      throw new LastNameNotFoundException("Last name was not provided");
+
+    List<Contact> contacts = this.contacts.stream()
+      .filter(contact -> contact.getLastName().equals(lastName))
+      .collect(Collectors.toList());
+
+    if (contacts.size() == 0)
+      throw new LastNameNotFoundException("Last name was not found by given parameters");
+
+    return contacts;
+  }
+
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
