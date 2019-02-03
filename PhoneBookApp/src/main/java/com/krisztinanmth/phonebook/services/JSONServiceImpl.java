@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,4 +64,30 @@ public class JSONServiceImpl implements JSONService {
     }
     return new Contact(firstName, lastName, dateOfBirth, phoneNumber, addresses);
   }
+
+  @Override
+  public void writeIntoJSON(String path, Contact newContact) {
+
+    JSONObject jo = new JSONObject();
+
+    jo.put("firstName", newContact.getFirstName());
+    jo.put("lastName", newContact.getLastName());
+    jo.put("dateOfBirth", newContact.getDateOfBirth());
+
+    JSONArray phoneNums = new JSONArray();
+    phoneNums.add(newContact.getPhoneNumber());
+    jo.put("phoneNumber", phoneNums);
+
+    JSONArray address = new JSONArray();
+    address.add(newContact.getAddress().toString());
+    jo.put("address", address);
+
+    try (FileWriter file = new FileWriter(path)) {
+      file.write(jo.toString());
+      file.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
 }

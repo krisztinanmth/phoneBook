@@ -9,4 +9,5 @@ public interface JSONService {
 
   List<Contact> readFromJSON(String path);
   Contact createContactFromJSONObject(JSONObject jo);
+  void writeIntoJSON(String path, Contact newContact);
 }
