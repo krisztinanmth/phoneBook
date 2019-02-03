@@ -4,12 +4,15 @@ import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
+import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import javax.naming.NameNotFoundException;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,20 +44,51 @@ public class ContactServiceImpl implements ContactService {
 
   @Override
   public void createNewContact(Contact contact) {
-    contacts.add(contact);
+    this.contacts.add(contact);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
-    showAllContacts(contacts);
+
+    showAllContacts(this.contacts);
   }
 
 
   @Override
   public void createNewContactsInBulk(List<Contact> newContacts) {
     newContacts.stream()
-      .map(contact -> contacts.add(contact))
+      .map(contact -> this.contacts.add(contact))
       .collect(Collectors.toList());
 
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
-    showAllContacts(contacts);
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+
+
+    //////////////////////////////////////////////////////////
+    System.out.println();
+    System.out.println("SHOWING CONTACTS WITH NEW CONTACTS");
+    System.out.println("===================================");
+    showAllContacts(this.contacts);
+  }
+
+  @Override
+  public void updateContact(String id, String dataToUpdate, String updatedData) {
+
+    for (Contact contact : this.contacts) {
+      if (contact.getName().equals(id)) {
+        if (dataToUpdate.equals(contact.getFirstName())) {
+          contact.setFirstName(updatedData);
+        }
+        if (dataToUpdate.equals(contact.getLastName())) {
+          contact.setLastName(updatedData);
+        }
+        if (dataToUpdate.equals(contact.getDateOfBirth())) {
+          contact.setDateOfBirth(updatedData);
+        }
+      }
+    }
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+
+    ////////////////////////////////////////////////////////////////
+    System.out.println();
+    System.out.println("UPDATED CONTACTS: ");
+    showAllContacts(this.contacts);
   }
 
 

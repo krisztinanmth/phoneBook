@@ -19,4 +19,5 @@ public interface ContactService {
   List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException;
   void createNewContact(Contact contact);
   void createNewContactsInBulk(List<Contact> contacts);
+  void updateContact(String id, String dataToUpdate, String updatedData);
 }
