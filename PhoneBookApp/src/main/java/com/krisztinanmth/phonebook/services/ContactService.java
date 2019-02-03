@@ -17,4 +17,6 @@ public interface ContactService {
   List<Contact> findByName(String name) throws NameNotFoundException;
   List<Contact> findByAddress(String ad) throws AddressNotFoundException;
   List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException;
+  void createNewContact(Contact contact);
+  void createNewContactsInBulk(List<Contact> contacts);
 }

@@ -32,6 +32,23 @@ public class ContactServiceImpl implements ContactService {
     }
   }
 
+  /**
+   * !!!!!!!!!!  Filter by date: Support searching contacts by their date of birth, by specifying a range. For example filterByDate(fromDate, toDate).
+   */
+
+  @Override
+  public void createNewContact(Contact contact) {
+    List<Contact> contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
+
+    contacts.add(contact);
+    jsonService.writeListOfContactsIntoJSON("src/main/resources/testContacts.json", contacts);
+  }
+
+  @Override
+  public void createNewContactsInBulk(List<Contact> contacts) {
+
+  }
+
   @Override
   public List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException {
     if (firstName == null || "".equals(firstName))
@@ -77,7 +94,6 @@ public class ContactServiceImpl implements ContactService {
     return contacts;
   }
 
-
   @Override
   public List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException {
     if (phoneNums.size() == 0)
@@ -92,7 +108,6 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
-
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
