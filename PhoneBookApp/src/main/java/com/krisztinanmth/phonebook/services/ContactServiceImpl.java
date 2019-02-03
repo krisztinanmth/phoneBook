@@ -22,7 +22,6 @@ public class ContactServiceImpl implements ContactService {
   @Autowired
   public ContactServiceImpl() {
     this.jsonService = new JSONServiceImpl();
-    //contacts = new ArrayList<>();
     contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
   }
 
