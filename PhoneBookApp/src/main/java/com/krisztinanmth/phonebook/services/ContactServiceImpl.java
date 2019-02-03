@@ -67,6 +67,7 @@ public class ContactServiceImpl implements ContactService {
     showAllContacts(this.contacts);
   }
 
+
   @Override
   public void updateContact(String id, String dataToUpdate, String updatedData) {
     for (Contact contact : this.contacts) {
@@ -90,6 +91,7 @@ public class ContactServiceImpl implements ContactService {
     showAllContacts(this.contacts);
   }
 
+
   @Override
   public void updateContactsPhoneNumber(String id, List<String> newPhoneNums) {
     for (Contact contact : this.contacts) {
@@ -101,6 +103,20 @@ public class ContactServiceImpl implements ContactService {
     ////////////////////////////////////
     System.out.println();
     System.out.println("UPDATED PHONE");
+    showAllContacts(this.contacts);
+  }
+
+  @Override
+  public void updateContactsAddress(String id, List<Address> newAddress) {
+    for (Contact contact : this.contacts) {
+      if (contact.getName().equals(id))
+        contact.setAddress(newAddress);
+    }
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+
+    ///////////////////////////////////
+    System.out.println();
+    System.out.println("UPDATED ADDRESS");
     showAllContacts(this.contacts);
   }
 

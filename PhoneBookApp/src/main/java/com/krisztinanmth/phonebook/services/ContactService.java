@@ -4,6 +4,7 @@ import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
+import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 
 import javax.naming.NameNotFoundException;
@@ -21,4 +22,5 @@ public interface ContactService {
   void createNewContactsInBulk(List<Contact> contacts);
   void updateContact(String id, String dataToUpdate, String updatedData);
   void updateContactsPhoneNumber(String id, List<String> newPhoneNums);
+  void updateContactsAddress(String id, List<Address> newAddress);
 }
