@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ContactService {
 
-  void showAllContacts();
+  void showAllContacts(List<Contact> contacts);
   List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
   List<Contact> findByLastName(String lastName) throws LastNameNotFoundException;
   List<Contact> findByName(String name) throws NameNotFoundException;

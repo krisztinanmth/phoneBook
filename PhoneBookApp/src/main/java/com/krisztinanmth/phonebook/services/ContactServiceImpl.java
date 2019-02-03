@@ -29,10 +29,9 @@ public class ContactServiceImpl implements ContactService {
 
 
   @Override
-  public void showAllContacts() {
-    for (Contact contact : contacts) {
+  public void showAllContacts(List<Contact> contacts) {
+    for (Contact contact : contacts)
       System.out.println(contact.toString());
-    }
   }
 
   /**
@@ -44,15 +43,18 @@ public class ContactServiceImpl implements ContactService {
   public void createNewContact(Contact contact) {
     contacts.add(contact);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
+    showAllContacts(contacts);
   }
 
 
   @Override
   public void createNewContactsInBulk(List<Contact> newContacts) {
-    for (Contact contact : newContacts)
-      contacts.add(contact);
+    newContacts.stream()
+      .map(contact -> contacts.add(contact))
+      .collect(Collectors.toList());
 
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
+    showAllContacts(contacts);
   }
 
 
@@ -118,7 +120,7 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
-  
+
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
