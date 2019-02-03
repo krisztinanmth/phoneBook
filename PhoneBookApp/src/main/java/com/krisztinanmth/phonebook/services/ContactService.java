@@ -23,4 +23,5 @@ public interface ContactService {
   void updateContact(String id, String dataToUpdate, String updatedData);
   void updateContactsPhoneNumber(String id, List<String> newPhoneNums);
   void updateContactsAddress(String id, List<Address> newAddress);
+  void deleteContact(Contact contactToDelete);
 }

@@ -45,7 +45,7 @@ public class ContactServiceImpl implements ContactService {
   @Override
   public void createNewContact(Contact contact) {
     this.contacts.add(contact);
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
 
     showAllContacts(this.contacts);
   }
@@ -64,6 +64,17 @@ public class ContactServiceImpl implements ContactService {
     System.out.println();
     System.out.println("SHOWING CONTACTS WITH NEW CONTACTS");
     System.out.println("===================================");
+    showAllContacts(this.contacts);
+  }
+
+  @Override
+  public void deleteContact(Contact contactToDelete) {
+    this.contacts.remove(contactToDelete);
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+
+    ///////////////////////////////////////////////////////
+    System.out.println();
+    System.out.println("CONTACT LIST AFTER DELETING ONE CONTACT");
     showAllContacts(this.contacts);
   }
 
