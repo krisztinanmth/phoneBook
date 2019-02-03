@@ -52,7 +52,7 @@ public class ContactServiceImpl implements ContactService {
 
 
   @Override
-  public void createNewContactsInBulk(List<Contact> newContacts) {
+  public void bulkCreate(List<Contact> newContacts) {
     newContacts.stream()
       .map(contact -> this.contacts.add(contact))
       .collect(Collectors.toList());
@@ -75,6 +75,18 @@ public class ContactServiceImpl implements ContactService {
     ///////////////////////////////////////////////////////
     System.out.println();
     System.out.println("CONTACT LIST AFTER DELETING ONE CONTACT");
+    showAllContacts(this.contacts);
+  }
+
+
+  @Override
+  public void bulkDelete(List<Contact> contactsToDelete) {
+    this.contacts.removeIf(contact -> contactsToDelete.contains(contact));
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+
+    /////////////////////////////////////
+    System.out.println();
+    System.out.println("CONTACTS AFTER DELETE IN BULK");
     showAllContacts(this.contacts);
   }
 
