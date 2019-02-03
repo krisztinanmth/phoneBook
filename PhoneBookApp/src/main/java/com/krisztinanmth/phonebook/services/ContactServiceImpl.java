@@ -19,11 +19,14 @@ public class ContactServiceImpl implements ContactService {
   private static JSONService jsonService;
   private List<Contact> contacts;
 
+  private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
+
   @Autowired
   public ContactServiceImpl() {
     this.jsonService = new JSONServiceImpl();
     contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
   }
+
 
   @Override
   public void showAllContacts() {
@@ -36,18 +39,22 @@ public class ContactServiceImpl implements ContactService {
    * !!!!!!!!!!  Filter by date: Support searching contacts by their date of birth, by specifying a range. For example filterByDate(fromDate, toDate).
    */
 
+
   @Override
   public void createNewContact(Contact contact) {
-    List<Contact> contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
-
     contacts.add(contact);
-    jsonService.writeListOfContactsIntoJSON("src/main/resources/testContacts.json", contacts);
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
   }
+
 
   @Override
-  public void createNewContactsInBulk(List<Contact> contacts) {
+  public void createNewContactsInBulk(List<Contact> newContacts) {
+    for (Contact contact : newContacts)
+      contacts.add(contact);
 
+    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, contacts);
   }
+
 
   @Override
   public List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException {
@@ -64,6 +71,7 @@ public class ContactServiceImpl implements ContactService {
     return contacts;
   }
 
+
   @Override
   public List<Contact> findByLastName(String lastName) throws LastNameNotFoundException {
     if (lastName == null || "".equals(lastName))
@@ -78,6 +86,7 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
+
 
   @Override
   public List<Contact> findByName(String name) throws NameNotFoundException {
@@ -94,6 +103,7 @@ public class ContactServiceImpl implements ContactService {
     return contacts;
   }
 
+
   @Override
   public List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException {
     if (phoneNums.size() == 0)
@@ -108,6 +118,7 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
+  
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {
