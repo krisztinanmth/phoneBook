@@ -84,29 +84,29 @@ public class JSONServiceImpl implements JSONService {
     }
   }
 
-//  @Override
-//  public void writeIntoJSON(String path, Contact newContact) {
-//
-//    JSONObject jo = new JSONObject();
-//
-//    jo.put("firstName", newContact.getFirstName());
-//    jo.put("lastName", newContact.getLastName());
-//    jo.put("dateOfBirth", newContact.getDateOfBirth());
-//
-//    JSONArray phoneNums = new JSONArray();
-//    phoneNums.add(newContact.getPhoneNumber());
-//    jo.put("phoneNumber", phoneNums);
-//
-//    JSONArray address = new JSONArray();
-//    address.add(newContact.getAddress().toString());
-//    jo.put("address", address);
-//
-//    try (FileWriter file = new FileWriter(path)) {
-//      file.write(jo.toString());
-//      file.flush();
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
-//  }
+  @Override
+  public void writeOneContactIntoJSON(String path, Contact newContact) {
+
+    JSONObject jo = new JSONObject();
+
+    jo.put("firstName", newContact.getFirstName());
+    jo.put("lastName", newContact.getLastName());
+    jo.put("dateOfBirth", newContact.getDateOfBirth());
+
+    JSONArray phoneNums = new JSONArray();
+    phoneNums.add(newContact.getPhoneNumber());
+    jo.put("phoneNumber", phoneNums);
+
+    JSONArray address = new JSONArray();
+    address.add(newContact.getAddress().toString());
+    jo.put("address", address);
+
+    try (FileWriter file = new FileWriter(path)) {
+      file.write(jo.toString());
+      file.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
 }
