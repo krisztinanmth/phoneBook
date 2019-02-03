@@ -20,4 +20,5 @@ public interface ContactService {
   void createNewContact(Contact contact);
   void createNewContactsInBulk(List<Contact> contacts);
   void updateContact(String id, String dataToUpdate, String updatedData);
+  void updateContactsPhoneNumber(String id, List<String> newPhoneNums);
 }
