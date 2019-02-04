@@ -35,13 +35,19 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public void createNewContact(Contact contact) {
+  public void createNewContact(Contact contact) throws ContactNotProvidedException {
+    if (contact == null)
+      throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
+
     this.contacts.add(contact);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
   }
 
   @Override
-  public void bulkCreate(List<Contact> newContacts) {
+  public void bulkCreate(List<Contact> newContacts) throws ContactNotProvidedException {
+    if (newContacts.size() == 0)
+      throw new ContactNotProvidedException("Please provide a list of contacts to proceed.");
+
     newContacts.stream()
       .map(contact -> this.contacts.add(contact))
       .collect(Collectors.toList());
@@ -50,19 +56,29 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public void deleteContact(Contact contactToDelete) {
+  public void deleteContact(Contact contactToDelete) throws ContactNotProvidedException {
+    if (contactToDelete == null)
+      throw new ContactNotProvidedException("Please provide a contact to proceed.");
+
     this.contacts.remove(contactToDelete);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
   }
 
   @Override
-  public void bulkDelete(List<Contact> contactsToDelete) {
+  public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException {
+    if (contactsToDelete.size() == 0)
+      throw new ContactNotProvidedException("Please provide a list of the contacts you would like to delete.");
     this.contacts.removeIf(contactsToDelete::contains);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
   }
 
   @Override
-  public void updateContact(String id, Contact updatedContact) {
+  public void updateContact(String id, Contact updatedContact) throws ContactNotProvidedException {
+    if (id == null || "".equals(id))
+      throw new ContactNotProvidedException("Please provide an id (first name and last name) to proceed.");
+    if (updatedContact == null)
+      throw new ContactNotProvidedException("Please provide all the fields of the updated contact.");
+
     for (Contact contact : this.contacts) {
       if (contact.getName().equals(id)) {
         contact.setFirstName(updatedContact.getFirstName());
