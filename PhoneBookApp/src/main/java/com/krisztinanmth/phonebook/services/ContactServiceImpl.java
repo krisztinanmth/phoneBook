@@ -1,9 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
-import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.*;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,11 +32,6 @@ public class ContactServiceImpl implements ContactService {
       System.out.println(contact.toString());
   }
 
-  /**
-   * !!!!!!!!!!  Filter by date: Support searching contacts by their date of birth, by specifying a range. For example filterByDate(fromDate, toDate).
-   */
-
-
   @Override
   public void createNewContact(Contact contact) {
     this.contacts.add(contact);
@@ -48,7 +40,6 @@ public class ContactServiceImpl implements ContactService {
     ///////////////////////////////////////////////
     showAllContacts(this.contacts);
   }
-
 
   @Override
   public void bulkCreate(List<Contact> newContacts) {
@@ -76,7 +67,6 @@ public class ContactServiceImpl implements ContactService {
     System.out.println("CONTACT LIST AFTER DELETING ONE CONTACT");
     showAllContacts(this.contacts);
   }
-
 
   @Override
   public void bulkDelete(List<Contact> contactsToDelete) {
@@ -108,7 +98,6 @@ public class ContactServiceImpl implements ContactService {
     showAllContacts(this.contacts);
   }
 
-
   @Override
   public List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException {
     if (firstName == null || "".equals(firstName))
@@ -123,7 +112,6 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
-
 
   @Override
   public List<Contact> findByLastName(String lastName) throws LastNameNotFoundException {
@@ -140,7 +128,6 @@ public class ContactServiceImpl implements ContactService {
     return contacts;
   }
 
-
   @Override
   public List<Contact> findByName(String name) throws NameNotFoundException {
     if (name == null || "".equals(name))
@@ -156,12 +143,20 @@ public class ContactServiceImpl implements ContactService {
     return contacts;
   }
 
-//  @Override
-//  public List<Contact> findByDate(String fromDate, String toDate) {
-//
-//    return null;
-//  }
+  @Override
+  public List<Contact> findByDate(Integer fromDate, Integer toDate) throws BirthdayNotFoundException {
+    if (fromDate == null || toDate == null)
+      throw new BirthdayNotFoundException("Please provide a date range.");
 
+    List<Contact> contacts = this.contacts.stream()
+      .filter(contact -> Integer.parseInt(contact.getDateOfBirth()) > fromDate && Integer.parseInt(contact.getDateOfBirth()) < toDate)
+      .collect(Collectors.toList());
+
+    if (contacts.size() == 0)
+      throw new BirthdayNotFoundException("No contact was found with date of birth in the provided range.");
+
+    return contacts;
+  }
 
   @Override
   public List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException {
@@ -177,7 +172,6 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
-
 
   @Override
   public List<Contact> findByAddress(String ad) throws AddressNotFoundException {

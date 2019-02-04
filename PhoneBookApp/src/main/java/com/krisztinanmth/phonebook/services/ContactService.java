@@ -1,9 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
-import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.*;
 import com.krisztinanmth.phonebook.models.Contact;
 
 import javax.naming.NameNotFoundException;
@@ -20,7 +17,7 @@ public interface ContactService {
   List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
   List<Contact> findByLastName(String lastName) throws LastNameNotFoundException;
   List<Contact> findByName(String name) throws NameNotFoundException;
-//  List<Contact> findByDate(String dateFrom, String dateUntil);
+  List<Contact> findByDate(Integer dateFrom, Integer dateUntil) throws BirthdayNotFoundException;
   List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException;
   List<Contact> findByAddress(String ad) throws AddressNotFoundException;
 }
