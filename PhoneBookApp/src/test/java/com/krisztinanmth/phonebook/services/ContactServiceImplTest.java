@@ -1,9 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
-import com.krisztinanmth.phonebook.exceptions.BirthdayNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
+import com.krisztinanmth.phonebook.exceptions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -208,4 +205,44 @@ class ContactServiceImplTest {
       assertThat(PhoneNumberNotFoundException.class);
     }
   }
+
+  @Test
+  void findByAddress_withExistingAddress() {
+    try {
+      assertEquals(3, contactService.findByAddress("California").size());
+    } catch (AddressNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  void findByAddress_withNonExistingAddress() {
+    try {
+      contactService.findByAddress("Hungary");
+      fail();
+    } catch (AddressNotFoundException e) {
+      assertThat(AddressNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByAddress_withoutParameter() {
+    try {
+      contactService.findByAddress("");
+      fail();
+    } catch (AddressNotFoundException e) {
+      assertThat(AddressNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByAddress_withNull() {
+    try {
+      contactService.findByAddress(null);
+      fail();
+    } catch (AddressNotFoundException e) {
+      assertThat(AddressNotFoundException.class);
+    }
+  }
+
 }
