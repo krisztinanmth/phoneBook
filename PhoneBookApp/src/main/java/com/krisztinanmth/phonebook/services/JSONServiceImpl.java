@@ -25,6 +25,7 @@ public class JSONServiceImpl implements JSONService {
     parser = new JSONParser();
   }
 
+  @Override
   public List<Contact> readFromJSON(String path) {
     Object object;
     try {
@@ -43,6 +44,7 @@ public class JSONServiceImpl implements JSONService {
     return contacts;
   }
 
+  @Override
   public Contact createContactFromJSONObject(JSONObject jo) {
     String firstName = (String) jo.get("firstName");
     String lastName = (String) jo.get("lastName");
@@ -80,5 +82,4 @@ public class JSONServiceImpl implements JSONService {
       e.printStackTrace();
     }
   }
-
 }

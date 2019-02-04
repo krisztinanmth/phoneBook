@@ -21,7 +21,7 @@ public class ContactServiceImpl implements ContactService {
   @Autowired
   public ContactServiceImpl() {
     jsonService = new JSONServiceImpl();
-    contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
+    this.contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
   }
 
 
@@ -68,6 +68,7 @@ public class ContactServiceImpl implements ContactService {
   public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException {
     if (contactsToDelete.size() == 0)
       throw new ContactNotProvidedException("Please provide a list of the contacts you would like to delete.");
+
     this.contacts.removeIf(contactsToDelete::contains);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
   }

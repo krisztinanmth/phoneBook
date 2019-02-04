@@ -4,16 +4,11 @@ import java.util.List;
 
 public class Contact {
 
-  // create variable Title ... try using Enums... search after how ...
   private String firstName;
   private String lastName;
   private String dateOfBirth;
   private List<String> phoneNumber;
   private List<Address> address;
-
-
-  public Contact() {
-  }
 
   public Contact(String firstName, String lastName, String dateOfBirth, List<String> phoneNumber, List<Address> address) {
     this.firstName = firstName;
