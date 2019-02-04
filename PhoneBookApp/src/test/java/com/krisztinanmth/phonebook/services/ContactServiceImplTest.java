@@ -1,5 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
+import com.krisztinanmth.phonebook.exceptions.BirthdayNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
@@ -138,6 +139,36 @@ class ContactServiceImplTest {
       fail();
     } catch (NameNotFoundException e) {
       assertThat(NameNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByDate_withExistingDate() {
+    try {
+      contactService.findByDate(19870101, 19890101);
+      fail();
+    } catch (BirthdayNotFoundException e) {
+      assertThat(BirthdayNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByDate_withNonExistingDate() {
+    try {
+      contactService.findByDate(20200101, 20400101);
+      fail();
+    } catch (BirthdayNotFoundException e) {
+      assertThat(BirthdayNotFoundException.class);
+    }
+  }
+
+  @Test
+  void findByDate_withNull() {
+    try {
+      contactService.findByDate(null, null);
+      fail();
+    } catch (BirthdayNotFoundException e) {
+      assertThat(BirthdayNotFoundException.class);
     }
   }
 
