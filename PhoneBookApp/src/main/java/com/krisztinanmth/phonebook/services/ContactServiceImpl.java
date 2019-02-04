@@ -16,29 +16,28 @@ public class ContactServiceImpl implements ContactService {
   private static JSONService jsonService;
   private List<Contact> contacts;
 
-  ///////////////////////////////////////////////////////
   private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
 
   @Autowired
   public ContactServiceImpl() {
-    this.jsonService = new JSONServiceImpl();
+    jsonService = new JSONServiceImpl();
     contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
   }
 
 
   @Override
-  public void showAllContacts(List<Contact> contacts) {
+  public void showAllContacts(List<Contact> contacts) throws ContactNotFoundException {
     for (Contact contact : contacts)
       System.out.println(contact.toString());
+
+    if (contacts.size() == 0)
+      throw new ContactNotFoundException("There are no contacts in the list.");
   }
 
   @Override
   public void createNewContact(Contact contact) {
     this.contacts.add(contact);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-    ///////////////////////////////////////////////
-    showAllContacts(this.contacts);
   }
 
   @Override
@@ -48,35 +47,18 @@ public class ContactServiceImpl implements ContactService {
       .collect(Collectors.toList());
 
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-
-    //////////////////////////////////////////////////////////
-    System.out.println();
-    System.out.println("SHOWING CONTACTS WITH NEW CONTACTS");
-    System.out.println("===================================");
-    showAllContacts(this.contacts);
   }
 
   @Override
   public void deleteContact(Contact contactToDelete) {
     this.contacts.remove(contactToDelete);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-    ///////////////////////////////////////////////////////
-    System.out.println();
-    System.out.println("CONTACT LIST AFTER DELETING ONE CONTACT");
-    showAllContacts(this.contacts);
   }
 
   @Override
   public void bulkDelete(List<Contact> contactsToDelete) {
-    this.contacts.removeIf(contact -> contactsToDelete.contains(contact));
+    this.contacts.removeIf(contactsToDelete::contains);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-    /////////////////////////////////////
-    System.out.println();
-    System.out.println("CONTACTS AFTER DELETE IN BULK");
-    showAllContacts(this.contacts);
   }
 
   @Override
@@ -91,11 +73,6 @@ public class ContactServiceImpl implements ContactService {
       }
     }
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-    /////////////////////////////////////////////////////////////
-    System.out.println();
-    System.out.println("UPDATE CONTACT WITH ONE FUNCTION");
-    showAllContacts(this.contacts);
   }
 
   @Override

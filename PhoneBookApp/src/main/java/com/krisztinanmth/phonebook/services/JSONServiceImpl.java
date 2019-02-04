@@ -8,7 +8,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,11 +35,9 @@ public class JSONServiceImpl implements JSONService {
         JSONObject jo = (JSONObject) o;
         contacts.add(createContactFromJSONObject(jo));
       }
-    } catch (FileNotFoundException e) {
+    } catch (ParseException e) {
       e.printStackTrace();
     } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ParseException e) {
       e.printStackTrace();
     }
     return contacts;

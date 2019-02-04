@@ -1,6 +1,8 @@
 package com.krisztinanmth.phonebook.services;
 
 import com.krisztinanmth.phonebook.exceptions.*;
+import com.krisztinanmth.phonebook.models.Contact;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -244,5 +246,4 @@ class ContactServiceImplTest {
       assertThat(AddressNotFoundException.class);
     }
   }
-
 }
