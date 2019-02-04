@@ -4,15 +4,12 @@ import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
-import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 import javax.naming.NameNotFoundException;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +19,7 @@ public class ContactServiceImpl implements ContactService {
   private static JSONService jsonService;
   private List<Contact> contacts;
 
+  ///////////////////////////////////////////////////////
   private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
 
   @Autowired
@@ -47,6 +45,7 @@ public class ContactServiceImpl implements ContactService {
     this.contacts.add(contact);
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
 
+    ///////////////////////////////////////////////
     showAllContacts(this.contacts);
   }
 
@@ -90,56 +89,22 @@ public class ContactServiceImpl implements ContactService {
     showAllContacts(this.contacts);
   }
 
-
   @Override
-  public void updateContact(String id, String dataToUpdate, String updatedData) {
+  public void updateContact(String id, Contact updatedContact) {
     for (Contact contact : this.contacts) {
       if (contact.getName().equals(id)) {
-        if (dataToUpdate.equals(contact.getFirstName())) {
-          contact.setFirstName(updatedData);
-        }
-        if (dataToUpdate.equals(contact.getLastName())) {
-          contact.setLastName(updatedData);
-        }
-        if (dataToUpdate.equals(contact.getDateOfBirth())) {
-          contact.setDateOfBirth(updatedData);
-        }
+        contact.setFirstName(updatedContact.getFirstName());
+        contact.setLastName(updatedContact.getLastName());
+        contact.setDateOfBirth(updatedContact.getDateOfBirth());
+        contact.setPhoneNumber(updatedContact.getPhoneNumber());
+        contact.setAddress(updatedContact.getAddress());
       }
     }
     jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
 
-    ////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////
     System.out.println();
-    System.out.println("UPDATED CONTACTS: ");
-    showAllContacts(this.contacts);
-  }
-
-
-  @Override
-  public void updateContactsPhoneNumber(String id, List<String> newPhoneNums) {
-    for (Contact contact : this.contacts) {
-      if (contact.getName().equals(id))
-        contact.setPhoneNumber(newPhoneNums);
-    }
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-    ////////////////////////////////////
-    System.out.println();
-    System.out.println("UPDATED PHONE");
-    showAllContacts(this.contacts);
-  }
-
-  @Override
-  public void updateContactsAddress(String id, List<Address> newAddress) {
-    for (Contact contact : this.contacts) {
-      if (contact.getName().equals(id))
-        contact.setAddress(newAddress);
-    }
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
-
-    ///////////////////////////////////
-    System.out.println();
-    System.out.println("UPDATED ADDRESS");
+    System.out.println("UPDATE CONTACT WITH ONE FUNCTION");
     showAllContacts(this.contacts);
   }
 
@@ -190,6 +155,12 @@ public class ContactServiceImpl implements ContactService {
 
     return contacts;
   }
+
+//  @Override
+//  public List<Contact> findByDate(String fromDate, String toDate) {
+//
+//    return null;
+//  }
 
 
   @Override
