@@ -1,5 +1,6 @@
 package com.krisztinanmth.phonebook.services;
 
+import com.google.gson.Gson;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 import org.json.simple.JSONArray;
@@ -64,22 +65,19 @@ public class JSONServiceImpl implements JSONService {
     return new Contact(firstName, lastName, dateOfBirth, phoneNumber, addresses);
   }
 
+
   @Override
   public void writeListOfContactsIntoJSON(String path, List<Contact> newContacts) {
 
-    JSONObject jo = new JSONObject();
-    JSONArray newContactsJSON = new JSONArray();
-
-    for (Contact contact : newContacts)
-      newContactsJSON.add(contact.toString());
-
-    jo.put("Contacts", newContactsJSON);
+    String json = new Gson().toJson(newContacts);
+    System.out.println(json);
 
     try (FileWriter file = new FileWriter(path)) {
-      file.write(jo.toString());
+      file.write(json);
       file.flush();
     } catch (IOException e) {
       e.printStackTrace();
     }
+
   }
 }
