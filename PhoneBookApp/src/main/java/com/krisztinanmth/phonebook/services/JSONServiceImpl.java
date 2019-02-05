@@ -70,7 +70,6 @@ public class JSONServiceImpl implements JSONService {
   public void writeListOfContactsIntoJSON(String path, List<Contact> newContacts) {
 
     String json = new Gson().toJson(newContacts);
-    System.out.println(json);
 
     try (FileWriter file = new FileWriter(path)) {
       file.write(json);
