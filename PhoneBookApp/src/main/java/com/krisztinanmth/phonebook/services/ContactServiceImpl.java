@@ -17,7 +17,7 @@ public class ContactServiceImpl implements ContactService {
   private List<Contact> contacts;
 
   private static final String JSON_PATH = "src/main/resources/contacts.json";
-  private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
+  // private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
 
 
   @Autowired
@@ -57,26 +57,40 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public void createNewContact(Contact contact) throws ContactNotProvidedException {
-    if (contact == null)
-      throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
+  public boolean isContactValid(Contact contact) {
+    try {
+      if (contact == null) {
+        throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
+      } else if (isContactInList(contact.getName())) {
+        throw new ContactAlreadyExistsException(contact.getName() + " is already in the list.");
+      }
+    } catch (ContactNotProvidedException e) {
+      System.err.println(e.getMessage());
+    } catch (ContactAlreadyExistsException e) {
+      System.err.println(e.getMessage());
+    } finally {
+      return (contact != null && !isContactInList(contact.getName()));
+    }
+  }
 
-    if (!isContactInList(contact.getName())) {
+  @Override
+  public void createNewContact(Contact contact) {
+    if (isContactValid(contact)) {
       this.contacts.add(contact);
       jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
     }
   }
 
   @Override
-  public void bulkCreate(List<Contact> newContacts) throws ContactNotProvidedException {
+  public void bulkCreate(List<Contact> newContacts) {
     if (newContacts.size() == 0)
       throw new ContactNotProvidedException("Please provide a list of contacts to proceed.");
 
-    newContacts.stream()
-      .filter(contact -> !isContactInList(contact.getName()))
-      .map(contact -> this.contacts.add(contact))
-      .collect(Collectors.toList());
-
+    for (Contact contact : newContacts) {
+      if (isContactValid(contact)) {
+        this.contacts.add(contact);
+      }
+    }
     jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
@@ -92,7 +106,7 @@ public class ContactServiceImpl implements ContactService {
   /// BULK DELETE-et is ird at .... legyen benne findContact by id... bar ide nem biztos h kell a list miatt
   /// de ezt meg meg kell nezned h mukodik-e
   /// meg az update-et is
-  
+
   @Override
   public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException {
     if (contactsToDelete.size() == 0)
