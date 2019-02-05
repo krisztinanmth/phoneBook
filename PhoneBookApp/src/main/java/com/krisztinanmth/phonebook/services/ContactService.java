@@ -11,11 +11,11 @@ public interface ContactService {
   void showAllContacts() throws ContactNotFoundException;
   boolean isContactInList(String id);
   Contact findContactById(String id);
-  boolean isContactValid(Contact contact);
-  void createNewContact(Contact contact);
-  void bulkCreate(List<Contact> contacts);
-  void deleteContact(String id) throws ContactNotProvidedException;
-  void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException;
+  boolean isContactValid(Contact contact) throws ContactNotProvidedException, ContactAlreadyExistsException;
+  void createNewContact(Contact contact) throws ContactNotProvidedException, ContactAlreadyExistsException ;
+  void bulkCreate(List<Contact> contacts) throws ContactNotProvidedException, ContactAlreadyExistsException ;
+  void deleteContact(String id) throws ContactNotProvidedException, ContactNotFoundException;
+  void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException, ContactNotFoundException;
   void updateContact(String id, Contact updatedContact) throws ContactNotProvidedException;
   List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
   List<Contact> findByLastName(String lastName) throws LastNameNotFoundException;

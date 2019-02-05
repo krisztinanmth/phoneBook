@@ -17,13 +17,11 @@ public class ContactServiceImpl implements ContactService {
   private List<Contact> contacts;
 
   private static final String JSON_PATH = "src/main/resources/contacts.json";
-  // private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
-
 
   @Autowired
   public ContactServiceImpl() {
     jsonService = new JSONServiceImpl();
-    this.contacts = jsonService.readFromJSON("src/main/resources/contacts.json");
+    this.contacts = jsonService.readFromJSON(JSON_PATH);
   }
 
 
@@ -57,24 +55,17 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public boolean isContactValid(Contact contact) {
-    try {
-      if (contact == null) {
-        throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
-      } else if (isContactInList(contact.getName())) {
-        throw new ContactAlreadyExistsException(contact.getName() + " is already in the list.");
-      }
-    } catch (ContactNotProvidedException e) {
-      System.err.println(e.getMessage());
-    } catch (ContactAlreadyExistsException e) {
-      System.err.println(e.getMessage());
-    } finally {
-      return (contact != null && !isContactInList(contact.getName()));
+  public boolean isContactValid(Contact contact) throws ContactNotProvidedException, ContactAlreadyExistsException {
+    if (contact == null) {
+      throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
+    } else if (isContactInList(contact.getName())) {
+      throw new ContactAlreadyExistsException(contact.getName() + " is already in the list.");
     }
+    return true;
   }
 
   @Override
-  public void createNewContact(Contact contact) {
+  public void createNewContact(Contact contact) throws ContactNotProvidedException, ContactAlreadyExistsException {
     if (isContactValid(contact)) {
       this.contacts.add(contact);
       jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
@@ -82,7 +73,7 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public void bulkCreate(List<Contact> newContacts) {
+  public void bulkCreate(List<Contact> newContacts) throws ContactNotProvidedException, ContactAlreadyExistsException {
     if (newContacts.size() == 0)
       throw new ContactNotProvidedException("Please provide a list of contacts to proceed.");
 
@@ -95,25 +86,34 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public void deleteContact(String id) throws ContactNotProvidedException {
-    if (id == null || "".equals(id))
-      throw new ContactNotProvidedException("Please provide a contact id (first name and last name together) to proceed.");
-
-    this.contacts.remove(findContactById(id));
-    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
+  public void deleteContact(String id) throws ContactNotProvidedException, ContactNotFoundException {
+      if (id == null || "".equals(id)) {
+        throw new ContactNotProvidedException("Please provide a contact id (first name and last name together) to proceed.");
+      } else if (!isContactInList(id)) {
+        throw new ContactNotFoundException("No contact was found with given id");
+      } else {
+        this.contacts.remove(findContactById(id));
+        jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
+      }
   }
 
-  /// BULK DELETE-et is ird at .... legyen benne findContact by id... bar ide nem biztos h kell a list miatt
-  /// de ezt meg meg kell nezned h mukodik-e
-  /// meg az update-et is
 
   @Override
-  public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException {
+  public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException, ContactNotFoundException {
     if (contactsToDelete.size() == 0)
       throw new ContactNotProvidedException("Please provide a list of the contacts you would like to delete.");
 
-    this.contacts.removeIf(contactsToDelete::contains);
+    for (int i = 0; i < contactsToDelete.size(); i++) {
+      if (this.contacts.contains(contactsToDelete.get(i))) {
+        this.contacts.remove(contactsToDelete.get(i));
+      } else {
+        throw new ContactNotFoundException("Contact was not found in the list");
+      }
+    }
     jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
+
+//    this.contacts.removeIf(contactsToDelete::contains);
+//    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
   @Override
