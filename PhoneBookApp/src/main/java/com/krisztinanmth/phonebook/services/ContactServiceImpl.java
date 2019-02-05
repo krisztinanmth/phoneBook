@@ -90,13 +90,12 @@ public class ContactServiceImpl implements ContactService {
       if (id == null || "".equals(id)) {
         throw new ContactNotProvidedException("Please provide a contact id (first name and last name together) to proceed.");
       } else if (!isContactInList(id)) {
-        throw new ContactNotFoundException("No contact was found with given id");
+        throw new ContactNotFoundException("No contact was found with given id.");
       } else {
         this.contacts.remove(findContactById(id));
         jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
       }
   }
-
 
   @Override
   public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException, ContactNotFoundException {
@@ -111,9 +110,6 @@ public class ContactServiceImpl implements ContactService {
       }
     }
     jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
-
-//    this.contacts.removeIf(contactsToDelete::contains);
-//    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
   @Override

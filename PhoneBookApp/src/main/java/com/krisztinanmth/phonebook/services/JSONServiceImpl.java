@@ -68,9 +68,7 @@ public class JSONServiceImpl implements JSONService {
 
   @Override
   public void writeListOfContactsIntoJSON(String path, List<Contact> newContacts) {
-
     String json = new Gson().toJson(newContacts);
-
     try (FileWriter file = new FileWriter(path)) {
       file.write(json);
       file.flush();

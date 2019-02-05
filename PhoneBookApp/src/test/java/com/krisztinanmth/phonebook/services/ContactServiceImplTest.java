@@ -24,14 +24,6 @@ public class ContactServiceImplTest {
     contactService = new ContactServiceImpl();
   }
 
-  @Test
-  public void findByFirstName_withExistingName() {
-    try {
-      assertEquals(1, contactService.findByFirstName("Gary").size());
-    } catch (FirstNameNotFoundException e) {
-      e.printStackTrace();
-    }
-  }
 
   @Test(expected = ContactNotProvidedException.class)
   public void createNewContact_WithNull() {
@@ -106,6 +98,15 @@ public class ContactServiceImplTest {
   @Test(expected = ContactNotProvidedException.class)
   public void updateContact_withEmptyString() {
     contactService.updateContact("", null);
+  }
+
+  @Test
+  public void findByFirstName_withExistingName() {
+    try {
+      assertEquals(1, contactService.findByFirstName("Gary").size());
+    } catch (FirstNameNotFoundException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test
@@ -261,7 +262,7 @@ public class ContactServiceImplTest {
   @Test
   public void findByPhoneNumber_withNonExistingNumber() {
     List<String> wrongNums = new ArrayList<>();
-    wrongNums.add("06-70-600-7479");
+    wrongNums.add("06-70-600-7579");
 
     try {
       contactService.findByPhoneNumber(wrongNums);
@@ -320,5 +321,6 @@ public class ContactServiceImplTest {
     } catch (AddressNotFoundException e) {
       assertThat(AddressNotFoundException.class);
     }
+
   }
 }
