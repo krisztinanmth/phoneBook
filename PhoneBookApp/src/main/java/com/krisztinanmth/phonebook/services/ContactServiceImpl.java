@@ -46,6 +46,17 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
+  public Contact findContactById(String id) {
+    Contact contactToReturn = new Contact();
+    for (Contact contact : this.contacts) {
+      if (contact.getName().equals(id)) {
+        contactToReturn = contact;
+      }
+    }
+    return contactToReturn;
+  }
+
+  @Override
   public void createNewContact(Contact contact) throws ContactNotProvidedException {
     if (contact == null)
       throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
@@ -70,14 +81,18 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
-  public void deleteContact(Contact contactToDelete) throws ContactNotProvidedException {
-    if (contactToDelete == null)
-      throw new ContactNotProvidedException("Please provide a contact to proceed.");
+  public void deleteContact(String id) throws ContactNotProvidedException {
+    if (id == null || "".equals(id))
+      throw new ContactNotProvidedException("Please provide a contact id (first name and last name together) to proceed.");
 
-    this.contacts.remove(contactToDelete);
+    this.contacts.remove(findContactById(id));
     jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
+  /// BULK DELETE-et is ird at .... legyen benne findContact by id... bar ide nem biztos h kell a list miatt
+  /// de ezt meg meg kell nezned h mukodik-e
+  /// meg az update-et is
+  
   @Override
   public void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException {
     if (contactsToDelete.size() == 0)
