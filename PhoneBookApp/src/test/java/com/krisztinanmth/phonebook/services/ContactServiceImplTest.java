@@ -1,6 +1,8 @@
 package com.krisztinanmth.phonebook.services;
 
 import com.krisztinanmth.phonebook.exceptions.*;
+import com.krisztinanmth.phonebook.models.Address;
+import com.krisztinanmth.phonebook.models.Contact;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +31,33 @@ public class ContactServiceImplTest {
     } catch (FirstNameNotFoundException e) {
       e.printStackTrace();
     }
+  }
+
+  @Test(expected = ContactNotProvidedException.class)
+  public void createNewContact_WithNull() {
+    contactService.createNewContact(null);
+  }
+
+  @Test(expected = ContactAlreadyExistsException.class)
+  public void createNewContact_withExistingContact() {
+    List<String> phoneNums = new ArrayList<>();
+    phoneNums.add( "1-202-555-0164" );
+    Address ad = new Address("California", "92614", "Irvine", "950 Joy Lane");
+    List<Address> address = new ArrayList<>();
+    address.add(ad);
+    Contact contact = new Contact("John", "Doe","19891002", phoneNums, address);
+    contactService.createNewContact(contact);
+  }
+
+  @Test
+  public void createNewContact_withNonExistingContact() {
+    List<String> phoneNums = new ArrayList<>();
+    phoneNums.add( "06-70-600-7479" );
+    Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
+    List<Address> address = new ArrayList<>();
+    address.add(ad);
+    Contact contact = new Contact("Suzie", "Doe","19891002", phoneNums, address);
+    contactService.createNewContact(contact);
   }
 
   @Test
