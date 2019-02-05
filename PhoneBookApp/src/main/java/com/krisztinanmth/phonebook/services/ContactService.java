@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ContactService {
 
-  void showAllContacts(List<Contact> contacts) throws ContactNotFoundException;
+  void showAllContacts() throws ContactNotFoundException;
   void createNewContact(Contact contact) throws ContactNotProvidedException ;
   void bulkCreate(List<Contact> contacts) throws ContactNotProvidedException;
   void deleteContact(Contact contactToDelete) throws ContactNotProvidedException;

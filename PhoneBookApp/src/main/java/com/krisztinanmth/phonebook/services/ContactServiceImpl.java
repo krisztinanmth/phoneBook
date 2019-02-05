@@ -26,11 +26,11 @@ public class ContactServiceImpl implements ContactService {
 
 
   @Override
-  public void showAllContacts(List<Contact> contacts) throws ContactNotFoundException {
-    for (Contact contact : contacts)
+  public void showAllContacts() throws ContactNotFoundException {
+    for (Contact contact : this.contacts)
       System.out.println(contact.toString());
 
-    if (contacts.size() == 0)
+    if (this.contacts.size() == 0)
       throw new ContactNotFoundException("There are no contacts in the list.");
   }
 
