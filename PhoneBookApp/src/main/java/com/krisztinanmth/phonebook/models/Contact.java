@@ -10,6 +10,9 @@ public class Contact {
   private List<String> phoneNumber;
   private List<Address> address;
 
+  public Contact() {
+  }
+
   public Contact(String firstName, String lastName, String dateOfBirth, List<String> phoneNumber, List<Address> address) {
     this.firstName = firstName;
     this.lastName = lastName;
