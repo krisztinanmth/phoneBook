@@ -60,6 +60,54 @@ public class ContactServiceImplTest {
     contactService.createNewContact(contact);
   }
 
+  @Test(expected = ContactNotProvidedException.class)
+  public void bulkCreate_withEmptyList() {
+    contactService.bulkCreate(new ArrayList<>());
+  }
+
+  @Test(expected = ContactNotProvidedException.class)
+  public void deleteContact_withNull() {
+    contactService.deleteContact(null);
+  }
+
+  @Test(expected = ContactNotProvidedException.class)
+  public void deleteContact_withEmptyString() {
+    contactService.deleteContact("");
+  }
+
+  @Test(expected = ContactNotFoundException.class)
+  public void deleteContact_withContactNotInList() {
+    contactService.deleteContact("krisztina nemeth");
+  }
+
+  @Test(expected = ContactNotProvidedException.class)
+  public void bulkDelete_withEmptyList() {
+    contactService.bulkDelete(new ArrayList<>());
+  }
+
+  @Test(expected = ContactNotFoundException.class)
+  public void bulkDelete_withNonExistingContact() {
+    List<String> phoneNums = new ArrayList<>();
+    phoneNums.add( "06-70-600-7479" );
+    Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
+    List<Address> address = new ArrayList<>();
+    address.add(ad);
+    Contact contact = new Contact("Suzie", "Doe","19891002", phoneNums, address);
+    List<Contact> contactsToDelete = new ArrayList<>();
+    contactsToDelete.add(contact);
+    contactService.bulkDelete(contactsToDelete);
+  }
+
+  @Test(expected = ContactNotProvidedException.class)
+  public void updateContact_withNull() {
+    contactService.updateContact("Karen Wilkinson", null);
+  }
+
+  @Test(expected = ContactNotProvidedException.class)
+  public void updateContact_withEmptyString() {
+    contactService.updateContact("", null);
+  }
+
   @Test
   public void findByFirstName_withNonExistingName() {
     try {
