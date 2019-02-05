@@ -1,7 +1,7 @@
 package com.krisztinanmth.phonebook.services;
 
 import com.krisztinanmth.phonebook.exceptions.*;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.naming.NameNotFoundException;
@@ -9,11 +9,11 @@ import javax.naming.NameNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.fail;
 
-class ContactServiceImplTest {
+public class ContactServiceImplTest {
 
   private static ContactService contactService;
 
@@ -23,7 +23,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByFirstName_withExistingName() {
+  public void findByFirstName_withExistingName() {
     try {
       assertEquals(1, contactService.findByFirstName("Gary").size());
     } catch (FirstNameNotFoundException e) {
@@ -32,7 +32,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByFirstName_withNonExistingName() {
+  public void findByFirstName_withNonExistingName() {
     try {
       contactService.findByFirstName("Kriszta");
       fail();
@@ -42,7 +42,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByFirstName_withoutName() {
+  public void findByFirstName_withoutName() {
     try {
       contactService.findByFirstName("");
       fail();
@@ -52,7 +52,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByFirstName_withNull() {
+  public void findByFirstName_withNull() {
     try {
       contactService.findByFirstName(null);
       fail();
@@ -62,7 +62,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByLastName_withExistingName() {
+  public void findByLastName_withExistingName() {
     try {
       assertEquals(1, contactService.findByLastName("Cunningham").size());
     } catch (LastNameNotFoundException e) {
@@ -71,7 +71,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByLastName_withNonExistingName() {
+  public void findByLastName_withNonExistingName() {
     try {
       contactService.findByLastName("Kriszta");
       fail();
@@ -81,7 +81,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByLastName_withoutName() {
+  public void findByLastName_withoutName() {
     try {
       contactService.findByLastName("");
       fail();
@@ -91,7 +91,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByLastName_withNull() {
+  public void findByLastName_withNull() {
     try {
       contactService.findByLastName(null);
       fail();
@@ -101,7 +101,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByName_withExistingName() {
+  public void findByName_withExistingName() {
     try {
       assertEquals(1, contactService.findByName("Wilkinson").size());
     } catch (NameNotFoundException e) {
@@ -110,7 +110,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByName_withNonExistingName() {
+  public void findByName_withNonExistingName() {
     try {
       contactService.findByName("Kriszta");
       fail();
@@ -120,7 +120,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByName_withoutName() {
+  public void findByName_withoutName() {
     try {
       contactService.findByName("");
       fail();
@@ -130,7 +130,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByName_withNull() {
+  public void findByName_withNull() {
     try {
       contactService.findByName(null);
       fail();
@@ -140,7 +140,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByDate_withExistingDate() {
+  public void findByDate_withExistingDate() {
     try {
       contactService.findByDate(19870101, 19890101);
       fail();
@@ -150,7 +150,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByDate_withNonExistingDate() {
+  public void findByDate_withNonExistingDate() {
     try {
       contactService.findByDate(20200101, 20400101);
       fail();
@@ -160,7 +160,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByDate_withNull() {
+  public void findByDate_withNull() {
     try {
       contactService.findByDate(null, null);
       fail();
@@ -170,7 +170,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByPhoneNumber_withExistingNumber() {
+  public void findByPhoneNumber_withExistingNumber() {
     List<String> phoneNums = new ArrayList<>();
     phoneNums.add("1-202-555-0164");
 
@@ -182,7 +182,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByPhoneNumber_withNonExistingNumber() {
+  public void findByPhoneNumber_withNonExistingNumber() {
     List<String> wrongNums = new ArrayList<>();
     wrongNums.add("06-70-600-7479");
 
@@ -195,7 +195,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByPhoneNumber_withEmptyList() {
+  public void findByPhoneNumber_withEmptyList() {
     List<String> emptyList = new ArrayList<>();
 
     try {
@@ -207,7 +207,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByAddress_withExistingAddress() {
+  public void findByAddress_withExistingAddress() {
     try {
       assertEquals(3, contactService.findByAddress("California").size());
     } catch (AddressNotFoundException e) {
@@ -216,7 +216,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByAddress_withNonExistingAddress() {
+  public void findByAddress_withNonExistingAddress() {
     try {
       contactService.findByAddress("Hungary");
       fail();
@@ -226,7 +226,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByAddress_withoutParameter() {
+  public void findByAddress_withoutParameter() {
     try {
       contactService.findByAddress("");
       fail();
@@ -236,7 +236,7 @@ class ContactServiceImplTest {
   }
 
   @Test
-  void findByAddress_withNull() {
+  public void findByAddress_withNull() {
     try {
       contactService.findByAddress(null);
       fail();
