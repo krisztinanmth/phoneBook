@@ -9,6 +9,7 @@ import java.util.List;
 public interface ContactService {
 
   void showAllContacts() throws ContactNotFoundException;
+  boolean isContactInList(String id);
   void createNewContact(Contact contact) throws ContactNotProvidedException ;
   void bulkCreate(List<Contact> contacts) throws ContactNotProvidedException;
   void deleteContact(Contact contactToDelete) throws ContactNotProvidedException;

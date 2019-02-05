@@ -16,7 +16,9 @@ public class ContactServiceImpl implements ContactService {
   private static JSONService jsonService;
   private List<Contact> contacts;
 
+  private static final String JSON_PATH = "src/main/resources/contacts.json";
   private static final String TEST_JSON_PATH = "src/main/resources/testContacts.json";
+
 
   @Autowired
   public ContactServiceImpl() {
@@ -35,12 +37,23 @@ public class ContactServiceImpl implements ContactService {
   }
 
   @Override
+  public boolean isContactInList(String id) {
+    for (Contact contact : this.contacts) {
+      if (contact.getName().equals(id))
+        return true;
+    }
+    return false;
+  }
+
+  @Override
   public void createNewContact(Contact contact) throws ContactNotProvidedException {
     if (contact == null)
       throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
 
-    this.contacts.add(contact);
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+    if (!isContactInList(contact.getName())) {
+      this.contacts.add(contact);
+      jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
+    }
   }
 
   @Override
@@ -49,10 +62,11 @@ public class ContactServiceImpl implements ContactService {
       throw new ContactNotProvidedException("Please provide a list of contacts to proceed.");
 
     newContacts.stream()
+      .filter(contact -> !isContactInList(contact.getName()))
       .map(contact -> this.contacts.add(contact))
       .collect(Collectors.toList());
 
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
   @Override
@@ -61,7 +75,7 @@ public class ContactServiceImpl implements ContactService {
       throw new ContactNotProvidedException("Please provide a contact to proceed.");
 
     this.contacts.remove(contactToDelete);
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
   @Override
@@ -70,7 +84,7 @@ public class ContactServiceImpl implements ContactService {
       throw new ContactNotProvidedException("Please provide a list of the contacts you would like to delete.");
 
     this.contacts.removeIf(contactsToDelete::contains);
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
   @Override
@@ -89,7 +103,7 @@ public class ContactServiceImpl implements ContactService {
         contact.setAddress(updatedContact.getAddress());
       }
     }
-    jsonService.writeListOfContactsIntoJSON(TEST_JSON_PATH, this.contacts);
+    jsonService.writeListOfContactsIntoJSON(JSON_PATH, this.contacts);
   }
 
   @Override
