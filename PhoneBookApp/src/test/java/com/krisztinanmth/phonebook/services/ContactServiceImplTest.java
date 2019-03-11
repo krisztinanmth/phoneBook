@@ -41,16 +41,16 @@ public class ContactServiceImplTest {
     contactService.createNewContact(contact);
   }
 
-  @Test
-  public void createNewContact_withNonExistingContact() {
-    List<String> phoneNums = new ArrayList<>();
-    phoneNums.add( "06-70-600-7479" );
-    Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
-    List<Address> address = new ArrayList<>();
-    address.add(ad);
-    Contact contact = new Contact("Suzie", "Doe","19891002", phoneNums, address);
-    contactService.createNewContact(contact);
-  }
+//  @Test
+//  public void createNewContact_withNonExistingContact() {
+//    List<String> phoneNums = new ArrayList<>();
+//    phoneNums.add( "06-70-600-7479" );
+//    Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
+//    List<Address> address = new ArrayList<>();
+//    address.add(ad);
+//    Contact contact = new Contact("Suzie", "Doe","19891002", phoneNums, address);
+//    contactService.createNewContact(contact);
+//  }
 
   @Test(expected = ContactNotProvidedException.class)
   public void bulkCreate_withEmptyList() {
