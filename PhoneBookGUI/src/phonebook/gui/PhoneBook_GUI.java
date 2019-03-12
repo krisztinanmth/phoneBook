@@ -15,6 +15,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+/**
+ * 
+ *To convert Gradle to Maven, first, Maven plugin need to be added in the build.gradle file.
+ *Then, simply run Gradle install in the directory. Lastly, simply run gradle install and the
+ *directory containing build.gradle will do the job. It will create pom-default.xml in the build/poms subfolder.
+ */
+
 public class PhoneBook_GUI {
 	
 	public PhoneBook_GUI() {
