@@ -2,11 +2,7 @@ buildscript {
     ext {
         springBootVersion = '2.1.2.RELEASE'
     }
-    repositories {
-		maven { url "http://maven.springframework.org/release" }
-		maven { url "http://maven.restlet.org" }
-		mavenCentral()
-    }
+    
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
@@ -20,20 +16,11 @@ group = 'com.krisztinanmth'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-plugins {
-	id 'maven'
-}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
-	apply plugin: 'com.diffplug.gradle.eclipse.mavencentral'
-	eclipseMavenCentral {
-		release '4.7.0', {
-			compile 'org.eclipse.swt'
-			useNativesForRunningPlatform()
-		}
-	}
+
 }
