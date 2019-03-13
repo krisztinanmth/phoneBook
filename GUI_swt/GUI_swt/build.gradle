@@ -23,7 +23,8 @@ dependencies {
     
     compile project(':phonebook')
     
-    //compile 'org.eclipse:swt:3.3.0-v3346'
+    compile files('lib/swt.jar')
+    
 }
 
 // In this section you declare where to find the dependencies of your project
