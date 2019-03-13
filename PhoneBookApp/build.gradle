@@ -5,12 +5,16 @@ buildscript {
     
 	repositories {
 		mavenCentral()
+		jcenter()
 	}
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
     }
+    
 }
 
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
@@ -23,7 +27,9 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
