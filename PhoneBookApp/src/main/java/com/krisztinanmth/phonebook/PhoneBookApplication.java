@@ -21,7 +21,7 @@ public class PhoneBookApplication {
 
   @Autowired
   public PhoneBookApplication() {
-    contactService = new ContactServiceImpl();
+    contactService = new ContactServiceImpl("src/main/resources/contacts.json");
   }
 
 
