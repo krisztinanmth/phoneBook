@@ -16,13 +16,13 @@ import com.krisztinanmth.phonebook.services.JSONServiceImpl;
 public class Client {
 	
 	private List<Contact> contacts;
-	private static JSONService jsonService = new JSONServiceImpl();
+	private static JSONService jsonService;
 	
 	private static final String JSON_PATH = "~/Desktop/phoneBookApp/phoneBook/PhoneBookApp/src/main/resources/contacts.json";
 	
 	public Client() {
-		//jsonService = new JSONServiceImpl();
-		contacts = jsonService.readFromJSON(JSON_PATH);
+		jsonService = new JSONServiceImpl(JSON_PATH);
+		contacts = jsonService.readFromJSON();
 		initUI();
 	}
 
