@@ -1,6 +1,5 @@
 package com.krisztinanmth.phonebook.services;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -35,7 +34,7 @@ public interface ContactService {
   List<Contact> findByLastName(String lastName) throws LastNameNotFoundException;
   List<Contact> findListOfContactsByName(String name) throws NameNotFoundException;
   Contact findContactByName(String name) throws NameNotFoundException;
-  List<Contact> findByDate(LocalDate dateFrom, LocalDate dateUntil) throws BirthdayNotFoundException;
+  List<Contact> findByDate(String dateFrom, String dateUntil) throws BirthdayNotFoundException;
   List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException;
   List<Contact> findByAddress(String ad) throws AddressNotFoundException;
 }

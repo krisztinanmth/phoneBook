@@ -58,8 +58,8 @@ public class ContactServiceImplTest {
     Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
     List<Address> address = new ArrayList<>();
     address.add(ad);
-    LocalDate datOfBirth = LocalDate.of(1989, 10, 02);
-    Contact contact = new Contact("Suzie", "Doe", datOfBirth, phoneNums, address);
+//    LocalDate datOfBirth = LocalDate.of(1989, 10, 02);
+    Contact contact = new Contact("Suzie", "Doe", "1988-12-11", phoneNums, address);
     contactService.createNewContact(contact);
   }
 
@@ -90,8 +90,8 @@ public class ContactServiceImplTest {
 		Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
 		List<Address> address = new ArrayList<>();
 		address.add(ad);
-		LocalDate birthDay = LocalDate.of(1989, 10, 02);
-		Contact contact = new Contact("Suzie", "Doe", birthDay, phoneNums, address);
+//		LocalDate birthDay = LocalDate.of(1989, 10, 02);
+		Contact contact = new Contact("Suzie", "Doe", "1989-10-02", phoneNums, address);
 		List<Contact> contactsToDelete = new ArrayList<>();
 		contactsToDelete.add(contact);
 		contactService.bulkDelete(contactsToDelete);
@@ -234,21 +234,21 @@ public class ContactServiceImplTest {
 //	@Test
 //	public void findByDate_withExistingDate() {
 //		try {
-//			LocalDate fromDate = LocalDate.of(1987-01-01);
-//			LocalDate toDate = LocalDate.of(1989, 01, 01);
-//			contactService.findByDate(fromDate, toDate);
+////			LocalDate fromDate = LocalDate.of(1987-01-01);
+////			LocalDate toDate = LocalDate.of(1989, 01, 01);
+//			contactService.findByDate("1987-01-01", "1989-01-01");
 //			fail();
 //		} catch (BirthdayNotFoundException e) {
 //			assertThat(BirthdayNotFoundException.class);
 //		}
 //	}
-
+//
 //	@Test
 //	public void findByDate_withNonExistingDate() {
 //		try {
-//			LocalDate fromDate = LocalDate.of(2060, 01, 01);
-//			LocalDate toDate = LocalDate.of(2080, 01, 01);
-//			contactService.findByDate(fromDate, toDate);
+////			LocalDate fromDate = LocalDate.of(2060, 01, 01);
+////			LocalDate toDate = LocalDate.of(2080, 01, 01);
+//			contactService.findByDate("2060-01-01", "2080-01-01");
 //			fail();
 //		} catch (BirthdayNotFoundException e) {
 //			assertThat(BirthdayNotFoundException.class);

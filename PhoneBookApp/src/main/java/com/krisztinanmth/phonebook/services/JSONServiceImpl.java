@@ -53,17 +53,17 @@ public class JSONServiceImpl implements JSONService {
 	public Contact createContactFromJSONObject(JSONObject jo) {
 		String firstName = (String) jo.get("firstName");
 		String lastName = (String) jo.get("lastName");
+		String dateOfBirth = (String) jo.get("dateOfBirth");
 		
 		
-		
-		JSONObject dateOfBirthJsonObject = (JSONObject) jo.get("dateOfBirth");
-		String jsonYear = String.valueOf(dateOfBirthJsonObject.get("year"));
-		String jsonMonth = String.valueOf(dateOfBirthJsonObject.get("month"));
-		String jsonDay = String.valueOf(dateOfBirthJsonObject.get("day"));
-		String dateOfBirthString = String.format("%s-%s-%s", jsonYear, jsonMonth, jsonDay);
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
-		LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
+//		JSONObject dateOfBirthJsonObject = (JSONObject) jo.get("dateOfBirth");
+//		String jsonYear = String.valueOf(dateOfBirthJsonObject.get("year"));
+//		String jsonMonth = String.valueOf(dateOfBirthJsonObject.get("month"));
+//		String jsonDay = String.valueOf(dateOfBirthJsonObject.get("day"));
+//		String dateOfBirthString = String.format("%s-%s-%s", jsonYear, jsonMonth, jsonDay);
+//		
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+//		LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
 		
 		List<String> phoneNumber = (List<String>) jo.get("phoneNumber");
 		List<Address> addresses = new ArrayList<>();

@@ -22,7 +22,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.krisztinanmth'
-version = '0.0.3-LocalDate-SNAPSHOT'
+version = '0.0.4-UUID-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {

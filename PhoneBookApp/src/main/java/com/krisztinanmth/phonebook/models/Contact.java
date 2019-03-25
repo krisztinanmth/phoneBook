@@ -1,6 +1,5 @@
 package com.krisztinanmth.phonebook.models;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,26 +28,17 @@ public class Contact {
 	private UUID id;
 	private String firstName;
 	private String lastName;
-	private LocalDate dateOfBirth;
+//	private LocalDate dateOfBirth;
 	
-//	private String dateOfBirth;
-	
+	private String dateOfBirth;
 	private List<String> phoneNumber;
 	private List<Address> address;
 
 	public Contact() {
+		this.id = UUID.randomUUID();
 	}
 
-//	public Contact(String firstName, String lastName, String dateOfBirth, List<String> phoneNumber, List<Address> address) {
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.dateOfBirth = dateOfBirth;
-//		this.phoneNumber = phoneNumber;
-//		this.address = address;
-//		this.id = UUID.randomUUID();
-//	}
-	
-	public Contact(String firstName, String lastName, LocalDate dateOfBirth, List<String> phoneNumber, List<Address> address) {
+	public Contact(String firstName, String lastName, String dateOfBirth, List<String> phoneNumber, List<Address> address) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
@@ -56,6 +46,15 @@ public class Contact {
 		this.address = address;
 		this.id = UUID.randomUUID();
 	}
+	
+//	public Contact(String firstName, String lastName, LocalDate dateOfBirth, List<String> phoneNumber, List<Address> address) {
+//		this.firstName = firstName;
+//		this.lastName = lastName;
+//		this.dateOfBirth = dateOfBirth;
+//		this.phoneNumber = phoneNumber;
+//		this.address = address;
+//		this.id = UUID.randomUUID();
+//	}
 	
 	public UUID getId() {
 		return id;
@@ -86,24 +85,24 @@ public class Contact {
 //		this.name = name;
 //	}
 
-//	public String getDateOfBirth() {
-//		return dateOfBirth;
-//	}
-	
-	public LocalDate getDateOfBirth() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-d");
-		String formattedDateOfBirthString = dateOfBirth.format(formatter);
-		LocalDate formattedDateOfBirth = LocalDate.parse(formattedDateOfBirthString);
-		return formattedDateOfBirth;
+	public String getDateOfBirth() {
+		return dateOfBirth;
 	}
 	
-//	public void setDateOfBirth(String dateOfBirth) {
-//		this.dateOfBirth = dateOfBirth;
+//	public LocalDate getDateOfBirth() {
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-d");
+//		String formattedDateOfBirthString = dateOfBirth.format(formatter);
+//		LocalDate formattedDateOfBirth = LocalDate.parse(formattedDateOfBirthString);
+//		return formattedDateOfBirth;
 //	}
 	
-	public void setDateOfBirth(LocalDate dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+	
+//	public void setDateOfBirth(LocalDate dateOfBirth) {
+//		this.dateOfBirth = dateOfBirth;
+//	}
 	
 	public List<String> getPhoneNumber() {
 		return phoneNumber;

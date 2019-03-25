@@ -143,7 +143,7 @@ public class ContactServiceImpl implements ContactService {
 				}
 				
 				if (updatedContactMap.containsKey(Contact.Field.DATE_OF_BIRTH)) {
-					LocalDate updatedDateOfBirth = (LocalDate) updatedContactMap.get(Contact.Field.DATE_OF_BIRTH);
+					String updatedDateOfBirth = (String) updatedContactMap.get(Contact.Field.DATE_OF_BIRTH);
 					contact.setDateOfBirth(updatedDateOfBirth);
 				} 
 				if (updatedContactMap.containsKey(Contact.Field.PHONE_NUMBER)) {
@@ -220,13 +220,14 @@ public class ContactServiceImpl implements ContactService {
 	}
 
 	@Override
-	public List<Contact> findByDate(LocalDate fromDate, LocalDate toDate) throws BirthdayNotFoundException {
+	public List<Contact> findByDate(String fromDate, String toDate) throws BirthdayNotFoundException {
 		if (fromDate == null || toDate == null)
 			throw new BirthdayNotFoundException("Please provide a date range.");
 
-//		List<Contact> contacts = this.contacts.stream()
-//				.filter(contact -> Integer.parseInt(contact.getDateOfBirth()) >= fromDate && Integer.parseInt(contact.getDateOfBirth()) <= toDate)
-//				.collect(Collectors.toList());
+		List<Contact> contacts = this.contacts.stream()
+				.filter(c -> Integer.parseInt(c.getDateOfBirth()) >= Integer.parseInt(fromDate) && Integer.parseInt(c.getDateOfBirth()) <= Integer.parseInt(toDate))
+				.collect(Collectors.toList());
+		
 		
 //		List<Contact> contacts = new ArrayList<Contact>();
 //		for (Contact contact : this.contacts) {
@@ -235,9 +236,9 @@ public class ContactServiceImpl implements ContactService {
 //			}
 //		}
 		
-		List<Contact> contacts = this.contacts.stream()
-				.filter(contact -> contact.getDateOfBirth().compareTo(fromDate) >= 0 && contact.getDateOfBirth().compareTo(toDate) <= 0)
-				.collect(Collectors.toList());
+//		List<Contact> contacts = this.contacts.stream()
+//				.filter(contact -> contact.getDateOfBirth().compareTo(fromDate) >= 0 && contact.getDateOfBirth().compareTo(toDate) <= 0)
+//				.collect(Collectors.toList());
 
 		if (contacts.size() == 0)
 			throw new BirthdayNotFoundException("No contact was found with date of birth in the provided range.");
