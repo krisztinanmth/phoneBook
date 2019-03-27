@@ -2,6 +2,7 @@ package com.krisztinanmth.phonebook.models;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class Contact {
 	private List<Address> address;
 
 	public Contact() {
-		this.id = UUID.randomUUID();
+		this("", "", "", Collections.emptyList(), Collections.emptyList());
 	}
 
 	public Contact(String firstName, String lastName, String dateOfBirth, List<String> phoneNumber, List<Address> address) {

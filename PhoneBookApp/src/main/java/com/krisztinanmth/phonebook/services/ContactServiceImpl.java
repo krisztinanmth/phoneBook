@@ -1,8 +1,5 @@
 package com.krisztinanmth.phonebook.services;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -62,7 +59,7 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public boolean isContactValid(Contact contact) throws ContactNotProvidedException {
 		if (contact == null) {
-			throw new ContactNotProvidedException("Please provide a contact with all fields to proceed.");
+			throw new ContactNotProvidedException("Please provide first name, last name and phone number to proceed.");
 		} 
 		return true;
 	}
