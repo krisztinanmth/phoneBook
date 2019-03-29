@@ -1,5 +1,8 @@
 package com.krisztinanmth.phonebook.models;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class Address {
 
   private String country;
@@ -8,6 +11,7 @@ public class Address {
   private String street;
 
   public Address() {
+	  this("", "", "", "");
   }
 
   public Address(String country, String zipCode, String city, String street) {
@@ -53,4 +57,26 @@ public class Address {
   public String toString() {
     return country + " " + zipCode + " " + city + " " + street;
   }
+  
+  
+  @Override
+  public boolean equals(Object obj) {
+	  final Address otherAddress = (Address) obj;
+	  if (!this.country.equals(otherAddress.country))
+		  return false;
+	  if (!this.zipCode.equals(otherAddress.zipCode))
+		  return false;
+	  if (!this.city.equals(otherAddress.city)) 
+		  return false;
+	  if (!this.street.equals(otherAddress.street))
+		  return false;
+	  return true;
+  }
+  
+  @Override
+	public int hashCode() {
+	  Objects.hash(this.country, this.zipCode, this.city, this.street);
+		return super.hashCode();
+	}
+
 }

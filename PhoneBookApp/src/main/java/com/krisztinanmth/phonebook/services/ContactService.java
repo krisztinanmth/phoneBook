@@ -2,6 +2,7 @@ package com.krisztinanmth.phonebook.services;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.naming.NameNotFoundException;
@@ -19,22 +20,19 @@ import com.krisztinanmth.phonebook.models.Contact.Field;
 
 public interface ContactService {
 
-//  void showAllContacts() throws ContactNotFoundException;
   List<Contact> getAllContacts();
-  boolean isContactInList(UUID id);
-  Contact findContactById(UUID id);
-  boolean isContactValid(Contact contact) throws ContactNotProvidedException, ContactAlreadyExistsException;
-  void createNewContact(Contact contact) throws ContactNotProvidedException, ContactAlreadyExistsException ;
-  void bulkCreate(List<Contact> contacts) throws ContactNotProvidedException, ContactAlreadyExistsException ;
-  void deleteContact(UUID id) throws ContactNotProvidedException, ContactNotFoundException;
-  void bulkDelete(List<Contact> contactsToDelete) throws ContactNotProvidedException, ContactNotFoundException;
-//  void updateContact(String id, Contact updatedContact) throws ContactNotProvidedException;
-  void updateContact(UUID id, Map<Field, Object> updatedContactMap) throws ContactNotProvidedException;
-  List<Contact> findByFirstName(String firstName) throws FirstNameNotFoundException;
-  List<Contact> findByLastName(String lastName) throws LastNameNotFoundException;
-  List<Contact> findListOfContactsByName(String name) throws NameNotFoundException;
-  Contact findContactByName(String name) throws NameNotFoundException;
-  List<Contact> findByDate(String dateFrom, String dateUntil) throws BirthdayNotFoundException;
-  List<Contact> findByPhoneNumber(List<String> phoneNums) throws PhoneNumberNotFoundException;
-  List<Contact> findByAddress(String ad) throws AddressNotFoundException;
+  boolean isContactInList(String id);
+  Optional<Contact> findContactById(String id);
+  void createNewContact(Contact contact);
+  void bulkCreate(List<Contact> contacts);
+  void deleteContact(String id);
+  void bulkDelete(List<Contact> contactsToDelete);
+  void updateContact(String id, Map<Field, Object> updatedContactMap);
+  List<Contact> findByFirstName(String firstName);
+  List<Contact> findByLastName(String lastName);
+  List<Contact> findListOfContactsByName(String name) ;
+  Contact findContactByName(String name);
+  List<Contact> findByDate(String dateFrom, String dateUntil);
+  List<Contact> findByPhoneNumber(List<String> phoneNums);
+  List<Contact> findByAddress(String ad);
 }

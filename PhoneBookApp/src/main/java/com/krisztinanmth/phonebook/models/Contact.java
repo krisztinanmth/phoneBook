@@ -1,7 +1,5 @@
 package com.krisztinanmth.phonebook.models;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +24,8 @@ public class Contact {
 		}
 	}
 
-	private UUID id;
+//	private UUID id;
+	private String id;
 	private String firstName;
 	private String lastName;
 //	private LocalDate dateOfBirth;
@@ -45,7 +44,7 @@ public class Contact {
 		this.dateOfBirth = dateOfBirth;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
-		this.id = UUID.randomUUID();
+		this.id = UUID.randomUUID().toString();
 	}
 	
 //	public Contact(String firstName, String lastName, LocalDate dateOfBirth, List<String> phoneNumber, List<Address> address) {
@@ -57,7 +56,7 @@ public class Contact {
 //		this.id = UUID.randomUUID();
 //	}
 	
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 	
@@ -125,5 +124,5 @@ public class Contact {
 	public String toString() {
 		return firstName + " " + lastName + " " + dateOfBirth + " " + phoneNumber + " " + address.toString();
 	}
-	
+
 }
