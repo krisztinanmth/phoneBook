@@ -1,7 +1,6 @@
 package com.krisztinanmth.phonebook.models;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class Address {
 

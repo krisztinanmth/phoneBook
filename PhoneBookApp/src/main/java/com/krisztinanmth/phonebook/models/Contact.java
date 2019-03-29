@@ -24,12 +24,9 @@ public class Contact {
 		}
 	}
 
-//	private UUID id;
 	private String id;
 	private String firstName;
 	private String lastName;
-//	private LocalDate dateOfBirth;
-	
 	private String dateOfBirth;
 	private List<String> phoneNumber;
 	private List<Address> address;
@@ -46,15 +43,6 @@ public class Contact {
 		this.address = address;
 		this.id = UUID.randomUUID().toString();
 	}
-	
-//	public Contact(String firstName, String lastName, LocalDate dateOfBirth, List<String> phoneNumber, List<Address> address) {
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.dateOfBirth = dateOfBirth;
-//		this.phoneNumber = phoneNumber;
-//		this.address = address;
-//		this.id = UUID.randomUUID();
-//	}
 	
 	public String getId() {
 		return id;
@@ -76,33 +64,17 @@ public class Contact {
 		this.lastName = lastName;
 	}
 
-	// i need the name getter for the findByName method in contactService
 	public String getName() {
 		return firstName + " " + lastName;
 	}
 	
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-
 	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 	
-//	public LocalDate getDateOfBirth() {
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-d");
-//		String formattedDateOfBirthString = dateOfBirth.format(formatter);
-//		LocalDate formattedDateOfBirth = LocalDate.parse(formattedDateOfBirthString);
-//		return formattedDateOfBirth;
-//	}
-	
 	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
-//	public void setDateOfBirth(LocalDate dateOfBirth) {
-//		this.dateOfBirth = dateOfBirth;
-//	}
 	
 	public List<String> getPhoneNumber() {
 		return phoneNumber;
