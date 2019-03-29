@@ -35,6 +35,14 @@ public class ContactServiceImplTest {
 	}
 
 	@Test
+	public void createContact_with_Null() {
+		int sizeOfContactList = contactService.getAllContacts().size();
+		contactService.createNewContact(null);
+		List<Contact> contactList = contactService.getAllContacts();
+		assertThat(contactList, hasSize(sizeOfContactList));
+	}
+	
+	@Test
 	public void createNewContact_withNonExistingContact() {
 		List<String> phoneNums = new ArrayList<>();
 		phoneNums.add("06-70-600-7479");
@@ -53,7 +61,23 @@ public class ContactServiceImplTest {
 	public void bulkCreate_withEmptyList() {
 		contactService.bulkCreate(new ArrayList<>());
 	}
-
+	
+	@Test
+	public void deleteContact_with_Null() {
+		int cListSize = contactService.getAllContacts().size();
+		contactService.deleteContact(null);
+		List<Contact> contactList = contactService.getAllContacts();
+		assertThat(contactList, hasSize(cListSize));
+	}
+	
+	@Test
+	public void deleteContact_with_EmptyStringId() {
+		int cListSize = contactService.getAllContacts().size();
+		contactService.deleteContact("");
+		List<Contact> contactList = contactService.getAllContacts();
+		assertThat(contactList, hasSize(cListSize));
+	}
+	
 	@Test
 	public void deleteContact_with_ExistingContact() {
 		int numberOfContactsInList = contactService.getAllContacts().size();
@@ -83,6 +107,32 @@ public class ContactServiceImplTest {
 		} catch (ContactNotProvidedException e) {
 			assertThat(ContactNotProvidedException.class);
 		}
+	}
+	
+	@Test
+	public void updateContact_with_ProvideMap_and_Id() {
+		Map<Field, Object> updateContactMap = new HashMap<Contact.Field, Object>();
+		List<String> phoneNumList = new ArrayList<String>();
+		phoneNumList.add("555-555");
+		List<Address> addressList = new ArrayList<Address>();
+		Address address = new Address("country", "zipcode", "city", "street");
+		addressList.add(address);
+		updateContactMap.put(Contact.Field.FIRST_NAME, "Jose");
+		updateContactMap.put(Contact.Field.LAST_NAME, "Jesus");
+		updateContactMap.put(Contact.Field.DATE_OF_BIRTH, "1991-12-11");
+		updateContactMap.put(Contact.Field.PHONE_NUMBER, phoneNumList);
+		updateContactMap.put(Contact.Field.ADDRESS, addressList);
+		Contact contactToUpdate = contactService.findByLastName("Cunningham").get(0);
+		contactService.updateContact(contactToUpdate.getId(), updateContactMap);
+		String resultFirst = contactToUpdate.getFirstName();
+		assertEquals(resultFirst, "Jose");
+		
+		String resultLast = contactToUpdate.getLastName();
+		assertEquals(resultLast, "Jesus");
+		
+		String resultDOB = contactToUpdate.getDateOfBirth();
+		assertEquals(resultDOB, "1991-12-11");
+		
 	}
 
 	@Test(expected = ContactNotProvidedException.class)
@@ -123,7 +173,7 @@ public class ContactServiceImplTest {
 	@Test
 	public void findByLastName_withExistingName() {
 		try {
-			assertEquals(1, contactService.findByLastName("Cunningham").size());
+			assertEquals(1, contactService.findByLastName("Jesus").size());
 		} catch (LastNameNotFoundException e) {
 			e.printStackTrace();
 		}
