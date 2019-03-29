@@ -1,21 +1,20 @@
 package com.krisztinanmth.phonebook.services;
 
-import com.google.gson.Gson;
-import com.krisztinanmth.phonebook.models.Address;
-import com.krisztinanmth.phonebook.models.Contact;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.Gson;
+import com.krisztinanmth.phonebook.models.Address;
+import com.krisztinanmth.phonebook.models.Contact;
 
 @Service
 public class JSONServiceImpl implements JSONService {
@@ -54,17 +53,7 @@ public class JSONServiceImpl implements JSONService {
 		String firstName = (String) jo.get("firstName");
 		String lastName = (String) jo.get("lastName");
 		String dateOfBirth = (String) jo.get("dateOfBirth");
-		
-		
-//		JSONObject dateOfBirthJsonObject = (JSONObject) jo.get("dateOfBirth");
-//		String jsonYear = String.valueOf(dateOfBirthJsonObject.get("year"));
-//		String jsonMonth = String.valueOf(dateOfBirthJsonObject.get("month"));
-//		String jsonDay = String.valueOf(dateOfBirthJsonObject.get("day"));
-//		String dateOfBirthString = String.format("%s-%s-%s", jsonYear, jsonMonth, jsonDay);
-//		
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
-//		LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
-		
+		@SuppressWarnings("unchecked")
 		List<String> phoneNumber = (List<String>) jo.get("phoneNumber");
 		List<Address> addresses = new ArrayList<>();
 
