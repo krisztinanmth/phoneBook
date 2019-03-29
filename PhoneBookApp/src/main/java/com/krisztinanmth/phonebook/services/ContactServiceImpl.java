@@ -93,6 +93,7 @@ public class ContactServiceImpl implements ContactService {
 		jsonService.writeListOfContactsIntoJSON(this.contacts);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void updateContact(String id, Map<Field, Object> updatedContactMap) {
 		
@@ -139,7 +140,6 @@ public class ContactServiceImpl implements ContactService {
 		if (contacts.size() == 0) {
 			System.err.println("The list is empty, as no contact was found with given first name.");
 		}
-
 		return contacts;
 	}
 
@@ -193,7 +193,6 @@ public class ContactServiceImpl implements ContactService {
 		if (contacts.size() == 0) {
 			System.err.println("The list is empty, as no contact was found with given name.");
 		}
-
 		return contacts;
 	}
 
@@ -209,7 +208,6 @@ public class ContactServiceImpl implements ContactService {
 		if (contacts.size() == 0) {
 			System.err.println("The list is empty, as no contact was found with date of birth in the provided range.");
 		}
-
 		return contacts;
 	}
 
@@ -225,7 +223,6 @@ public class ContactServiceImpl implements ContactService {
 		if (contacts.size() == 0) {
 			System.err.println("The list is empty, as no contact was found with given phone numbers.");
 		}
-
 		return contacts;
 	}
 
@@ -242,7 +239,6 @@ public class ContactServiceImpl implements ContactService {
 		if (contacts.size() == 0) {
 			System.err.println("The list is empty, as no contact was found with given address.");
 		}
-
 		return contacts;
 	}
 
