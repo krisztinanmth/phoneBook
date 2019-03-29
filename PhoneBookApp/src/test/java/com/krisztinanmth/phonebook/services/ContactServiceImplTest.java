@@ -7,7 +7,9 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
@@ -21,6 +23,7 @@ import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
+import com.krisztinanmth.phonebook.models.Contact.Field;
 
 public class ContactServiceImplTest {
 
@@ -38,7 +41,6 @@ public class ContactServiceImplTest {
 		Address ad = new Address("USA", "1087", "New York", "Red Bull Road");
 		List<Address> address = new ArrayList<>();
 		address.add(ad);
-//    LocalDate datOfBirth = LocalDate.of(1989, 10, 02);
 		Contact contact = new Contact("Suzie", "Doe", "1988-12-11", phoneNums, address);
 		List<Contact> contactList = contactService.getAllContacts();
 		int sizeOfList = contactList.size();
@@ -46,17 +48,17 @@ public class ContactServiceImplTest {
 		contactList = contactService.getAllContacts();
 		assertThat(contactList, hasSize(sizeOfList + 1));
 	}
-	
-	@Test
-	public void deleteContact_with_ExistingContact() {
-		int numberOfContactsInList = contactService.getAllContacts().size();
-		contactService.deleteContact(contactService.findContactByName("Gerhard Fleming").getId());
-		assertThat(contactService.getAllContacts(), hasSize(numberOfContactsInList -1 ));
-	}
 
 	@Test(expected = ContactNotProvidedException.class)
 	public void bulkCreate_withEmptyList() {
 		contactService.bulkCreate(new ArrayList<>());
+	}
+
+	@Test
+	public void deleteContact_with_ExistingContact() {
+		int numberOfContactsInList = contactService.getAllContacts().size();
+		contactService.deleteContact(contactService.findContactByName("Gerhard Fleming").getId());
+		assertThat(contactService.getAllContacts(), hasSize(numberOfContactsInList - 1));
 	}
 
 	@Test(expected = ContactNotProvidedException.class)
@@ -65,10 +67,22 @@ public class ContactServiceImplTest {
 	}
 
 	@Test(expected = ContactNotProvidedException.class)
-	public void updateContact_withNull() throws ContactNotProvidedException {
+	public void updateContact_withNullMap() throws ContactNotProvidedException {
 		Contact johnnyContact;
 		johnnyContact = contactService.findListOfContactsByName("John Doe").get(0);
 		contactService.updateContact(johnnyContact.getId(), null);
+	}
+
+	@Test
+	public void updateContact_with_idNull() {
+		Map<Field, Object> updatedContactMap = new HashMap<Field, Object>();
+		updatedContactMap.put(Contact.Field.FIRST_NAME, "lulu");
+		try {
+			contactService.updateContact(null, updatedContactMap);
+			fail();
+		} catch (ContactNotProvidedException e) {
+			assertThat(ContactNotProvidedException.class);
+		}
 	}
 
 	@Test(expected = ContactNotProvidedException.class)
@@ -145,30 +159,6 @@ public class ContactServiceImplTest {
 		assertEquals(1, contactService.findListOfContactsByName("Wilkinson").size());
 	}
 
-//	@Test
-//	public void findByDate_withExistingDate() {
-//		try {
-////			LocalDate fromDate = LocalDate.of(1987-01-01);
-////			LocalDate toDate = LocalDate.of(1989, 01, 01);
-//			contactService.findByDate("1987-01-01", "1989-01-01");
-//			fail();
-//		} catch (BirthdayNotFoundException e) {
-//			assertThat(BirthdayNotFoundException.class);
-//		}
-//	}
-
-//	@Test
-//	public void findByDate_withNonExistingDate() {
-//		try {
-////			LocalDate fromDate = LocalDate.of(2060, 01, 01);
-////			LocalDate toDate = LocalDate.of(2080, 01, 01);
-//			contactService.findByDate("2060-01-01", "2080-01-01");
-//			fail();
-//		} catch (BirthdayNotFoundException e) {
-//			assertThat(BirthdayNotFoundException.class);
-//		}
-//	}
-
 	@Test
 	public void findByDate_withNull() {
 		try {
@@ -183,7 +173,6 @@ public class ContactServiceImplTest {
 	public void findByPhoneNumber_withExistingNumber() {
 		List<String> phoneNums = new ArrayList<>();
 		phoneNums.add("1-202-555-0144");
-
 		try {
 			assertEquals(1, contactService.findByPhoneNumber(phoneNums).size());
 		} catch (PhoneNumberNotFoundException e) {
@@ -201,7 +190,6 @@ public class ContactServiceImplTest {
 	@Test
 	public void findByPhoneNumber_withEmptyList() {
 		List<String> emptyList = new ArrayList<>();
-
 		try {
 			contactService.findByPhoneNumber(emptyList);
 			fail();
@@ -233,33 +221,5 @@ public class ContactServiceImplTest {
 		} catch (AddressNotFoundException e) {
 			assertThat(AddressNotFoundException.class);
 		}
-
 	}
-	
-//	@Test
-//	public void updateContact_with_idNull() {
-//		Map<Field, Object> updatedContactMap = new HashMap<Field, Object>();
-//		updatedContactMap.put(Contact.Field.FIRST_NAME, "lulu");
-//		
-//		try {
-//			contactService.updateContact(null, updatedContactMap);
-//			fail();
-//		} catch (ContactNotProvidedException e) {
-//			assertThat(ContactNotProvidedException.class);
-//		}
-//	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
