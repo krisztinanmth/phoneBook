@@ -1,9 +1,9 @@
 package com.contacts.ui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -40,7 +40,7 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 	@Override
 	public void createControl(Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(2, false));
+		container.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createLabelComp(container);
@@ -154,8 +154,9 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 		}
 		
 		if (errorMessages.size() == 0) {
-			setPageComplete(true);
 			setErrorMessage("");
+			setPageComplete(true);
+			
 		} else {
 			setErrorMessage(errorMessages.get(0));
 			setPageComplete(false);
@@ -192,35 +193,9 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 		}
 		initialAddressList.add(initialAddress);
 		initialContact.setAddress(initialAddressList);
-		
-		
 	}
-	
-//	private Contact createNewContactFromWizard() {
-//		initialContact.setFirstName(firstNameText.getText());
-//		initialContact.setLastName(lastNameText.getText());
-//		initialContact.setDateOfBirth(dateOfBirthText.getText());
-//
-//		List<String> phoneNumList = new ArrayList<String>();
-//		String phoneNum = phoneNumText.getText();
-//		phoneNumList.add(phoneNum);
-//		initialContact.setPhoneNumber(phoneNumList);
-//
-//		List<Address> addressList = new ArrayList<Address>();
-//		Address address = new Address();
-//		address.setCountry(countryText.getText());
-//		address.setZipCode(zipCodeText.getText());
-//		address.setCity(cityText.getText());
-//		address.setStreet(streetText.getText());
-//		addressList.add(address);
-//		initialContact.setAddress(addressList);
-//		return initialContact;
-//	}
 	
 	protected Contact getContact() {
-//		initialContact = createNewContactFromWizard();   // DELETE THIS .... JUST RIGHT NOW ITS NOT WORKING THE OTHER WAY
-//		System.err.println(initialContact.toString());
 		return initialContact;
 	}
-
 }
