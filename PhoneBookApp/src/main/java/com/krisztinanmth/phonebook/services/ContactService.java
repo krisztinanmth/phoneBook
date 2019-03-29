@@ -3,18 +3,7 @@ package com.krisztinanmth.phonebook.services;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
-import javax.naming.NameNotFoundException;
-
-import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.BirthdayNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.ContactAlreadyExistsException;
-import com.krisztinanmth.phonebook.exceptions.ContactNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.ContactNotProvidedException;
-import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import com.krisztinanmth.phonebook.models.Contact;
 import com.krisztinanmth.phonebook.models.Contact.Field;
 

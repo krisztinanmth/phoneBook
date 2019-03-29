@@ -2,20 +2,12 @@ package com.krisztinanmth.phonebook.services;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.fail;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.fail;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.naming.NameNotFoundException;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
@@ -23,15 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.BirthdayNotFoundException;
-import com.krisztinanmth.phonebook.exceptions.ContactAlreadyExistsException;
-import com.krisztinanmth.phonebook.exceptions.ContactNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.ContactNotProvidedException;
 import com.krisztinanmth.phonebook.exceptions.FirstNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
-import com.krisztinanmth.phonebook.models.Contact.Field;
 
 public class ContactServiceImplTest {
 
