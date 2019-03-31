@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 import com.krisztinanmth.phonebook.services.ContactService;
-import com.krisztinanmth.phonebook.services.ContactServiceImpl;
+import com.krisztinanmth.phonebook.services.JSONContactService;
 
 
 @SpringBootApplication
@@ -20,7 +20,7 @@ public class PhoneBookApplication {
 
   @Autowired
   public PhoneBookApplication() {
-    contactService = new ContactServiceImpl("src/main/resources/contacts.json");
+    contactService = new JSONContactService("src/main/resources/contacts.json");
   }
 
 

@@ -25,13 +25,13 @@ import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
 import com.krisztinanmth.phonebook.models.Contact.Field;
 
-public class ContactServiceImplTest {
+public class JSONContactServiceTest {
 
 	private static ContactService contactService;
 
 	@Autowired
-	public ContactServiceImplTest() {
-		contactService = new ContactServiceImpl("src/main/resources/contacts.json");
+	public JSONContactServiceTest() {
+		contactService = new JSONContactService("src/main/resources/contacts.json");
 	}
 
 	@Test

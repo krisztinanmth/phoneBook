@@ -1,5 +1,9 @@
 package com.krisztinanmth.phonebook.services;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -7,9 +11,14 @@ import java.util.stream.Collectors;
 
 import javax.naming.NameNotFoundException;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.krisztinanmth.phonebook.exceptions.AddressNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.BirthdayNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.ContactNotProvidedException;
@@ -21,18 +30,69 @@ import com.krisztinanmth.phonebook.models.Contact;
 import com.krisztinanmth.phonebook.models.Contact.Field;
 
 @Service
-public class ContactServiceImpl implements ContactService {
+public class JSONContactService implements ContactService {
 
-	private static JSONService jsonService;
+	private JSONParser parser;
+	private String jsonPath;
 	private List<Contact> contacts;
 
 	@Autowired
-	public ContactServiceImpl(String jsonPath) {
-		jsonService = new JSONServiceImpl(jsonPath);
-		this.contacts = jsonService.readFromJSON();
+	public JSONContactService(String jsonPath) {
+		contacts = new ArrayList<>();
+		parser = new JSONParser();
+		this.jsonPath = jsonPath;
+		this.contacts = readFromJSON();
 	}
 	
-	public ContactServiceImpl() {
+	public JSONContactService() {
+	}
+	
+	public List<Contact> readFromJSON() {
+		Object object;
+		try {
+			object = parser.parse(new FileReader(jsonPath));
+			JSONArray jsonArray = (JSONArray) object;
+
+			for (Object o : jsonArray) {
+				JSONObject jo = (JSONObject) o;
+				contacts.add(createContactFromJSONObject(jo));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return contacts;
+	}
+	
+	public Contact createContactFromJSONObject(JSONObject jo) {
+		String firstName = (String) jo.get("firstName");
+		String lastName = (String) jo.get("lastName");
+		String dateOfBirth = (String) jo.get("dateOfBirth");
+		@SuppressWarnings("unchecked")
+		List<String> phoneNumber = (List<String>) jo.get("phoneNumber");
+		List<Address> addresses = new ArrayList<>();
+
+		JSONArray addressList = (JSONArray) jo.get("address");
+		for (Object ad : addressList) {
+			Address address = new Address();
+			address.setCountry((String) ((JSONObject) ad).get("country"));
+			address.setZipCode((String) ((JSONObject) ad).get("zipCode"));
+			address.setCity((String) ((JSONObject) ad).get("city"));
+			address.setStreet((String) ((JSONObject) ad).get("street"));
+			addresses.add(address);
+		}
+		return new Contact(firstName, lastName, dateOfBirth, phoneNumber, addresses);
+	}
+	
+	public void writeListOfContactsIntoJSON(List<Contact> newContacts) {
+		String json = new Gson().toJson(newContacts);
+		try (FileWriter file = new FileWriter(jsonPath)) {
+			file.write(json);
+			file.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -53,7 +113,7 @@ public class ContactServiceImpl implements ContactService {
 	public void createNewContact(Contact contact) {
 		if (contact != null) {
 			this.contacts.add(contact);
-			jsonService.writeListOfContactsIntoJSON(this.contacts);
+			writeListOfContactsIntoJSON(this.contacts);
 		}
 	}
 
@@ -66,7 +126,7 @@ public class ContactServiceImpl implements ContactService {
 				this.contacts.add(contact);
 			}
 		}
-		jsonService.writeListOfContactsIntoJSON(this.contacts);
+		writeListOfContactsIntoJSON(this.contacts);
 	}
 
 	@Override
@@ -77,7 +137,7 @@ public class ContactServiceImpl implements ContactService {
 				this.contacts.remove(findContactById.get());
 			}
 		}
-		jsonService.writeListOfContactsIntoJSON(this.contacts);
+		writeListOfContactsIntoJSON(this.contacts);
 	}
 	
 	@Override
@@ -90,8 +150,13 @@ public class ContactServiceImpl implements ContactService {
 				this.contacts.remove(contactsToDelete.get(i));
 			} 
 		}
-		jsonService.writeListOfContactsIntoJSON(this.contacts);
+		writeListOfContactsIntoJSON(this.contacts);
 	}
+//	
+//	@Override
+//	public void updateContact(String id, PersonUpdate personupdate) {
+//		
+//	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -125,7 +190,7 @@ public class ContactServiceImpl implements ContactService {
 				findContactById.get().setAddress(updatedAddresses);
 			}
 		}
-		jsonService.writeListOfContactsIntoJSON(this.contacts);
+		writeListOfContactsIntoJSON(this.contacts);
 	}
 
 	@Override
