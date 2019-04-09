@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.krisztinanmth.phonebook.models.Contact;
 import com.krisztinanmth.phonebook.models.Contact.Field;
-import com.krisztinanmth.phonebook.models.PersonUpdate;
+import com.krisztinanmth.phonebook.models.ContactUpdate;
 
 public interface ContactService {
 
@@ -17,8 +17,8 @@ public interface ContactService {
   void bulkCreate(List<Contact> contacts);
   void deleteContact(String id);
   void bulkDelete(List<Contact> contactsToDelete);
-//  void updateContact(String id, PersonUpdate personupdate);
-  void updateContact(String id, Map<Field, Object> updatedContactMap);
+  void updateContact(String id, ContactUpdate contactUpdate);
+//  void updateContact(String id, Map<Field, Object> updatedContactMap);
   List<Contact> findByFirstName(String firstName);
   List<Contact> findByLastName(String lastName);
   List<Contact> findListOfContactsByName(String name) ;

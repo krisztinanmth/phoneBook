@@ -56,26 +56,47 @@ public class Address {
   public String toString() {
     return country + " " + zipCode + " " + city + " " + street;
   }
-  
-  
-  @Override
-  public boolean equals(Object obj) {
-	  final Address otherAddress = (Address) obj;
-	  if (!this.country.equals(otherAddress.country))
-		  return false;
-	  if (!this.zipCode.equals(otherAddress.zipCode))
-		  return false;
-	  if (!this.city.equals(otherAddress.city)) 
-		  return false;
-	  if (!this.street.equals(otherAddress.street))
-		  return false;
-	  return true;
-  }
-  
-  @Override
+
+	@Override
 	public int hashCode() {
-	  Objects.hash(this.country, this.zipCode, this.city, this.street);
-		return super.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((street == null) ? 0 : street.hashCode());
+		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
+		return result;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (street == null) {
+			if (other.street != null)
+				return false;
+		} else if (!street.equals(other.street))
+			return false;
+		if (zipCode == null) {
+			if (other.zipCode != null)
+				return false;
+		} else if (!zipCode.equals(other.zipCode))
+			return false;
+		return true;
+	}
 }

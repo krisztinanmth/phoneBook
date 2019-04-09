@@ -7,9 +7,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
@@ -23,7 +21,7 @@ import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
-import com.krisztinanmth.phonebook.models.Contact.Field;
+import com.krisztinanmth.phonebook.models.ContactUpdate;
 
 public class JSONContactServiceTest {
 
@@ -89,57 +87,46 @@ public class JSONContactServiceTest {
 	public void bulkDelete_withEmptyList() {
 		contactService.bulkDelete(new ArrayList<>());
 	}
-
-	@Test(expected = ContactNotProvidedException.class)
-	public void updateContact_withNullMap() throws ContactNotProvidedException {
-		Contact johnnyContact;
-		johnnyContact = contactService.findListOfContactsByName("John Doe").get(0);
-		contactService.updateContact(johnnyContact.getId(), null);
-	}
-
+	
 	@Test
-	public void updateContact_with_idNull() {
-		Map<Field, Object> updatedContactMap = new HashMap<Field, Object>();
-		updatedContactMap.put(Contact.Field.FIRST_NAME, "lulu");
-		try {
-			contactService.updateContact(null, updatedContactMap);
-			fail();
-		} catch (ContactNotProvidedException e) {
-			assertThat(ContactNotProvidedException.class);
-		}
+	public void updateContact_withContactUpdate_ChangeFirstName() {
+		Contact contact = contactService.findByLastName("Wilkinson").get(0);
+		List<Contact> contactList = contactService.getAllContacts();
+		ContactUpdate contactUpdate = new ContactUpdate(contact);
+		contactUpdate.setFirstName("Lilla");
+		contactService.updateContact(contact.getId(), contactUpdate);
+		
+		assertEquals("Lilla", contactList.get(contactList.size() - 1).getFirstName());
 	}
 	
 	@Test
-	public void updateContact_with_ProvideMap_and_Id() {
-		Map<Field, Object> updateContactMap = new HashMap<Contact.Field, Object>();
-		List<String> phoneNumList = new ArrayList<String>();
-		phoneNumList.add("555-555");
-		List<Address> addressList = new ArrayList<Address>();
-		Address address = new Address("country", "zipcode", "city", "street");
-		addressList.add(address);
-		updateContactMap.put(Contact.Field.FIRST_NAME, "Jose");
-		updateContactMap.put(Contact.Field.LAST_NAME, "Jesus");
-		updateContactMap.put(Contact.Field.DATE_OF_BIRTH, "1991-12-11");
-		updateContactMap.put(Contact.Field.PHONE_NUMBER, phoneNumList);
-		updateContactMap.put(Contact.Field.ADDRESS, addressList);
-		Contact contactToUpdate = contactService.findByLastName("Cunningham").get(0);
-		contactService.updateContact(contactToUpdate.getId(), updateContactMap);
-		String resultFirst = contactToUpdate.getFirstName();
-		assertEquals(resultFirst, "Jose");
+	public void updateContact_withContactUpdate_ChangeAllFields() {
+		Contact contact = contactService.findByFirstName("Daniel").get(0);
+		List<Contact> contactList = contactService.getAllContacts();
+		int sizeOfList = contactList.size();
 		
-		String resultLast = contactToUpdate.getLastName();
-		assertEquals(resultLast, "Jesus");
+		ContactUpdate contactUpdate = new ContactUpdate(contact);
+		contactUpdate.setFirstName("TestFirst");
+		contactUpdate.setLastName("TestLast");
+		contactUpdate.setDateOfBirth("TTTT-TT-TT");
 		
-		String resultDOB = contactToUpdate.getDateOfBirth();
-		assertEquals(resultDOB, "1991-12-11");
+		List<String> phoneNum = new ArrayList<String>();
+		phoneNum.add("TEST_000");
+		contactUpdate.setPhoneNumber(phoneNum);
 		
+		List<Address> addList = new ArrayList<Address>();
+		Address ad = new Address("testCountry", "testZip", "testCity", "testStreet");
+		addList.add(ad);
+		contactUpdate.setAddress(addList);
+		
+		contactService.updateContact(contact.getId(), contactUpdate);
+		assertEquals("TestFirst", contactList.get(sizeOfList - 1).getFirstName());
+		assertEquals("TestLast", contactList.get(sizeOfList - 1).getLastName());
+		assertEquals("TTTT-TT-TT", contactList.get(sizeOfList - 1).getDateOfBirth());
+		assertEquals(phoneNum, contactList.get(sizeOfList - 1).getPhoneNumber());
+		assertEquals(addList, contactList.get(sizeOfList - 1).getAddress());
 	}
-
-	@Test(expected = ContactNotProvidedException.class)
-	public void updateContact_withNoID() {
-		contactService.updateContact(null, null);
-	}
-
+	
 	@Test
 	public void findByFirstName_withExistingName() {
 		assertThat(new ArrayList<>(), IsEmptyCollection.empty());
@@ -173,7 +160,7 @@ public class JSONContactServiceTest {
 	@Test
 	public void findByLastName_withExistingName() {
 		try {
-			assertEquals(1, contactService.findByLastName("Jesus").size());
+			assertEquals(1, contactService.findByLastName("Wilkinson").size());
 		} catch (LastNameNotFoundException e) {
 			e.printStackTrace();
 		}

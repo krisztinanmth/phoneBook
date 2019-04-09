@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,18 +26,17 @@ import com.krisztinanmth.phonebook.exceptions.LastNameNotFoundException;
 import com.krisztinanmth.phonebook.exceptions.PhoneNumberNotFoundException;
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
-import com.krisztinanmth.phonebook.models.Contact.Field;
+import com.krisztinanmth.phonebook.models.ContactUpdate;
 
 @Service
 public class JSONContactService implements ContactService {
 
 	private JSONParser parser;
 	private String jsonPath;
-	private List<Contact> contacts;
+	private List<Contact> contacts = new ArrayList<Contact>();
 
 	@Autowired
 	public JSONContactService(String jsonPath) {
-		contacts = new ArrayList<>();
 		parser = new JSONParser();
 		this.jsonPath = jsonPath;
 		this.contacts = readFromJSON();
@@ -152,47 +150,16 @@ public class JSONContactService implements ContactService {
 		}
 		writeListOfContactsIntoJSON(this.contacts);
 	}
-//	
-//	@Override
-//	public void updateContact(String id, PersonUpdate personupdate) {
-//		
-//	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public void updateContact(String id, Map<Field, Object> updatedContactMap) {
-		
-		if (id == null)
-			throw new ContactNotProvidedException("Please provide an id to proceed.");
-		if (updatedContactMap == null)
-			throw new ContactNotProvidedException("Please provide the fields you would like to update.");
-		
-		Optional<Contact> findContactById = findContactById(id) ;
-		if (findContactById.isPresent()) {
-			if (updatedContactMap.containsKey(Contact.Field.FIRST_NAME) && (!updatedContactMap.get(Contact.Field.FIRST_NAME).equals(findContactById.get().getFirstName()))) {
-				String updatedFirstName = (String) updatedContactMap.get(Contact.Field.FIRST_NAME);
-				findContactById.get().setFirstName(updatedFirstName);
-			} 
-			if (updatedContactMap.containsKey(Contact.Field.LAST_NAME) && (!updatedContactMap.get(Contact.Field.LAST_NAME).equals(findContactById.get().getLastName()))) {
-				String updatedLastName = (String) updatedContactMap.get(Contact.Field.LAST_NAME);
-				findContactById.get().setLastName(updatedLastName);
-			}
-			if (updatedContactMap.containsKey(Contact.Field.DATE_OF_BIRTH) && (!updatedContactMap.get(Contact.Field.DATE_OF_BIRTH).equals(findContactById.get().getDateOfBirth()))) {
-				String updatedDateOfBirth = (String) updatedContactMap.get(Contact.Field.DATE_OF_BIRTH);
-				findContactById.get().setDateOfBirth(updatedDateOfBirth);
-			} 
-			if (updatedContactMap.containsKey(Contact.Field.PHONE_NUMBER) && (!findContactById.get().getPhoneNumber().contains(updatedContactMap.get(Contact.Field.PHONE_NUMBER)))) {
-				List<String> updatedPhoneNums = (List<String>) updatedContactMap.get(Contact.Field.PHONE_NUMBER);
-				findContactById.get().setPhoneNumber(updatedPhoneNums);
-			}
-			if (updatedContactMap.containsKey(Contact.Field.ADDRESS) && (!findContactById.get().getAddress().contains(updatedContactMap.get(Contact.Field.ADDRESS)))) {
-				List<Address> updatedAddresses = (List<Address>) updatedContactMap.get(Contact.Field.ADDRESS);
-				findContactById.get().setAddress(updatedAddresses);
-			}
-		}
+	public void updateContact(String id, ContactUpdate contactUpdate) {
+		Contact contact = findContactById(id).get();
+		Contact updatedContact = contactUpdate.getUpdatedContact(contact, contactUpdate);
+		this.contacts.remove(contact);
+		this.contacts.add(updatedContact);
 		writeListOfContactsIntoJSON(this.contacts);
 	}
-
+			
 	@Override
 	public List<Contact> findByFirstName(String firstName) {
 		if (firstName == null || firstName.length() == 0)
@@ -233,7 +200,7 @@ public class JSONContactService implements ContactService {
 				e.printStackTrace();
 			}
 		
-		Contact foundContact = new Contact();
+		Contact foundContact = Contact.initialContact();
 		for (Contact contact : this.contacts) {
 			if (contact.getName().equals(name)) {
 				foundContact = contact;
