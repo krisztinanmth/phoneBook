@@ -1,9 +1,8 @@
 package com.contacts.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -31,14 +30,15 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
-import com.krisztinanmth.phonebook.models.Contact.Field;
+import com.krisztinanmth.phonebook.models.ContactUpdate;
 import com.krisztinanmth.phonebook.services.ContactService;
-import com.krisztinanmth.phonebook.services.ContactServiceImpl;
+import com.krisztinanmth.phonebook.services.JSONContactService;
 
 public class Client implements ModifyListener {
 	
 	private static final String JSON_PATH = "/Users/krisztinka/Desktop/contacts.json";
 	private ContactService contactService;
+	private Set<Contact> contacts;
 	
 	private Text firstNameText;
 	private Text lastNameText;
@@ -59,7 +59,8 @@ public class Client implements ModifyListener {
 	private Button addContactBtn;
 	
 	public Client() {
-		contactService = new ContactServiceImpl(JSON_PATH);
+		contactService = new JSONContactService(JSON_PATH);
+		contacts = contactService.getAllContacts();
 		init();
 	}
 
@@ -159,13 +160,12 @@ public class Client implements ModifyListener {
 	}
 	
 	private void importTreeContent() {
-		List<Contact> contacts = contactService.getAllContacts();
 		if (contacts != null) {
 			rootNode = new TreeItem(contactTree, SWT.NONE);
 			rootNode.setText("CONTACTS:");
-			for (int i = 0; i < contacts.size(); i++) {
+			
+			for (Contact contact : contacts) {
 				final TreeItem contactItemsOfTree = new TreeItem(rootNode, SWT.NONE);
-				Contact contact = contacts.get(i);
 				contactItemsOfTree.setText(contact.getName());
 				contactItemsOfTree.setData(contact);
 			}
@@ -399,41 +399,78 @@ public class Client implements ModifyListener {
 	}
 	
 	private void updateContact() {
-		Map<Field, Object> updatedContactMap = new HashMap<Contact.Field, Object>();
-		
-		Contact contactToUpdate = getSelectedContact();
+		Contact contact = getSelectedContact();
+		ContactUpdate contactUpdate = new ContactUpdate(contact);
 		
 		String newPhoneNumber = phoneNumText.getText();
 		
+		List<String> newPhoneNumList = new ArrayList<String>();
+		newPhoneNumList.add(newPhoneNumber);
+		List<String> oldPhoneNumList = contact.getPhoneNumber();
+		
 		Address newAddress = new Address();
-		newAddress.setCountry(countryText.getText());
-		newAddress.setZipCode(zipCodeText.getText());
-		newAddress.setCity(cityText.getText());
-		newAddress.setStreet(streetText.getText());
+		if (countryText.getText().length() != 0) {
+			newAddress.setCountry(countryText.getText());
+		}
+		if (zipCodeText.getText().length() != 0) { 
+			newAddress.setZipCode(zipCodeText.getText());
+		}
+		if (cityText.getText().length() != 0) {
+			newAddress.setCity(cityText.getText());
+		}
+		if (streetText.getText().length() != 0) {
+			newAddress.setStreet(streetText.getText());
+		}
 		
-		if (!contactToUpdate.getFirstName().equals(firstNameText.getText())) {
-			updatedContactMap.put(Contact.Field.FIRST_NAME, firstNameText.getText());
-		}
-		if (!contactToUpdate.getLastName().equals(lastNameText.getText())) {
-			updatedContactMap.put(Contact.Field.LAST_NAME, lastNameText.getText());
-		}
-		if (!contactToUpdate.getDateOfBirth().equals(dateOfBirthText.getText())) {
-			updatedContactMap.put(Contact.Field.DATE_OF_BIRTH, dateOfBirthText.getText());
-		}
-		if (!contactToUpdate.getPhoneNumber().contains(newPhoneNumber)) {
-			List<String> newPhoneNumList = new ArrayList<String>();
-			newPhoneNumList.add(newPhoneNumber);
-			updatedContactMap.put(Contact.Field.PHONE_NUMBER, newPhoneNumList);
-		}
-		if (!contactToUpdate.getAddress().contains(newAddress)) {
-			List<Address> newAddressList = new ArrayList<Address>();
-			newAddressList.add(newAddress);
-			updatedContactMap.put(Contact.Field.ADDRESS, newAddressList);
-		}
-		contactService.updateContact(contactToUpdate.getId(), updatedContactMap);
 		
-		String updatedName = contactToUpdate.getName();
+		List<Address> oldAddList = contact.getAddress();
+		List<Address> newAddList = new ArrayList<Address>();
+		newAddList.add(newAddress);
+		
+		
+		
+		if (!contact.getFirstName().equals(firstNameText.getText())) {
+			contactUpdate.setFirstName(firstNameText.getText());
+		}
+		if (!contact.getLastName().equals(lastNameText.getText())) {
+			contactUpdate.setLastName(lastNameText.getText());
+		}
+		if (!contact.getDateOfBirth().equals(dateOfBirthText.getText())) {
+			contactUpdate.setDateOfBirth(dateOfBirthText.getText());
+		}
+		
+		if (!oldPhoneNumList.contains(newPhoneNumber)) {
+			for (int i = 0; i < oldPhoneNumList.size(); i++) {
+				newPhoneNumList.add(oldPhoneNumList.get(i));
+			}
+			contactUpdate.setPhoneNumber(newPhoneNumList);
+		}
+		
+		if (!oldAddList.contains(newAddress)) {
+			for (int i = 0; i < oldAddList.size(); i++) {
+				newAddList.add(oldAddList.get(i));
+			}
+			contactUpdate.setAddress(newAddList);
+		}
+		
+		contactService.updateContact(contact.getId(), contactUpdate);
+		String updatedName = contactUpdate.getFirstName() + " " + contactUpdate.getLastName();
+		resetDataOnTreeItems(contact.getId());
 		refreshTreeAfterUpdatingContact(updatedName);
+	}
+	
+	private void resetDataOnTreeItems(String id) {
+		for (int i = 0; i < contactTree.getItems()[0].getItems().length; i++) {
+			Contact originalContact = (Contact) contactTree.getItems()[0].getItem(i).getData();
+			if (originalContact.getId().equals(id)) {
+				for (Contact c : contacts) {
+					if (c.getId().equals(id)) {
+						Contact updatedContact = c;
+						contactTree.getItems()[0].getItem(i).setData(updatedContact);
+					}
+				}
+			}
+		}
 	}
 	
 	private void refreshTreeAfterUpdatingContact(String updatedName) {

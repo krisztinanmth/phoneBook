@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.krisztinanmth.phonebook.models.Address;
 import com.krisztinanmth.phonebook.models.Contact;
+import com.krisztinanmth.phonebook.models.ContactUpdate;
 
 public class AddNewContactPage extends WizardPage implements ModifyListener {
 	
@@ -33,7 +34,7 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 	public AddNewContactPage(String pageName) {
 		super(pageName);
 		setTitle(pageName);
-		initialContact = new Contact();
+		initialContact = Contact.initialContact();
 		setPageComplete(false);
 	}
 	
@@ -154,7 +155,7 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 		}
 		
 		if (errorMessages.size() == 0) {
-			setErrorMessage("");
+			setErrorMessage(null);
 			setPageComplete(true);
 			
 		} else {
@@ -165,15 +166,15 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 	
 	private void setFields() {
 		
-		initialContact.setFirstName(firstNameText.getText());
-		initialContact.setLastName(lastNameText.getText());
+		initialContact = initialContact.withFirstName(firstNameText.getText());
+		initialContact = initialContact.withLastName(lastNameText.getText());
 		
 		List<String> initialPhoneNumList = new ArrayList<String>();
 		initialPhoneNumList.add(phoneNumText.getText());
-		initialContact.setPhoneNumber(initialPhoneNumList);
+		initialContact = initialContact.withPhoneNumber(initialPhoneNumList);
 		
 		if (!dateOfBirthText.getText().equals(initialContact.getDateOfBirth())) {
-			initialContact.setDateOfBirth(dateOfBirthText.getText());
+			initialContact = initialContact.withDateOfBirth(dateOfBirthText.getText());
 		}
 		
 		List<Address> initialAddressList = new ArrayList<Address>();
@@ -192,7 +193,7 @@ public class AddNewContactPage extends WizardPage implements ModifyListener {
 			initialAddress.setStreet(streetText.getText());
 		}
 		initialAddressList.add(initialAddress);
-		initialContact.setAddress(initialAddressList);
+		initialContact = initialContact.withAddress(initialAddressList);
 	}
 	
 	protected Contact getContact() {

@@ -66,19 +66,19 @@ public class ContactUpdate {
 	
 	public Contact getUpdatedContact(Contact contact, ContactUpdate contactUpdate) {
 		if (!contact.getFirstName().equals(contactUpdate.getFirstName())) {
-			contact = contact.with_FirstName(contactUpdate.getFirstName());
+			contact = contact.withFirstName(contactUpdate.getFirstName());
 		}
 		if (!contact.getLastName().equals(contactUpdate.getLastName())) {
-			contact = contact.with_LastName(contactUpdate.getLastName());
+			contact = contact.withLastName(contactUpdate.getLastName());
 		}
 		if (!contact.getDateOfBirth().equals(contactUpdate.getDateOfBirth())) {
-			contact = contact.with_DateOfBirth(contactUpdate.getDateOfBirth());
+			contact = contact.withDateOfBirth(contactUpdate.getDateOfBirth());
 		}
 		if (!contact.getPhoneNumber().equals(contactUpdate.getPhoneNumber())) {
-			contact = contact.with_PhoneNumber(contactUpdate.getPhoneNumber());
+			contact = contact.withPhoneNumber(contactUpdate.getPhoneNumber());
 		}
 		if (!contact.getAddress().equals(contactUpdate.getAddress())) {
-			contact = contact.with_Address(contactUpdate.getAddress());
+			contact = contact.withAddress(contactUpdate.getAddress());
 		}
 		return contact;
 	}

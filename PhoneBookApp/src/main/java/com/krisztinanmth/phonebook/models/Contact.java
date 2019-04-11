@@ -33,7 +33,7 @@ public final class Contact {
 	private final String dateOfBirth;
 	private final List<String> phoneNumber;
 	private final List<Address> address;
-
+	
 	public static Contact initialContact() {
 		return new Contact("", "", "", Collections.emptyList(), Collections.emptyList());
 	}
@@ -59,7 +59,7 @@ public final class Contact {
 		return firstName;
 	}
 
-	public Contact with_FirstName(String firstname) {
+	public Contact withFirstName(String firstname) {
 		Contact updatedContact = new Contact(this.id, firstname, this.lastName, this.dateOfBirth, this.phoneNumber, this.address);
 		return updatedContact;
 	}
@@ -68,7 +68,7 @@ public final class Contact {
 		return lastName;
 	}
 
-	public Contact with_LastName(String lastName) {
+	public Contact withLastName(String lastName) {
 		Contact updatedContact = new Contact(this.id, this.firstName, lastName, this.dateOfBirth, this.phoneNumber, this.address);
 		return updatedContact;
 	}
@@ -81,7 +81,7 @@ public final class Contact {
 		return dateOfBirth;
 	}
 
-	public Contact with_DateOfBirth(String dateOfBirth) {
+	public Contact withDateOfBirth(String dateOfBirth) {
 		Contact updatedContact = new Contact(this.id, this.firstName, this.lastName, dateOfBirth, this.phoneNumber, this.address);
 		return updatedContact;
 	}
@@ -90,7 +90,7 @@ public final class Contact {
 		return phoneNumber;
 	}
 
-	public Contact with_PhoneNumber(List<String> phoneNumber) {
+	public Contact withPhoneNumber(List<String> phoneNumber) {
 		Contact updatedContact = new Contact(this.id, this.firstName, this.lastName, this.dateOfBirth, phoneNumber, this.address);
 		return updatedContact;
 	}
@@ -99,7 +99,7 @@ public final class Contact {
 		return address;
 	}
 
-	public Contact with_Address(List<Address> address) {
+	public Contact withAddress(List<Address> address) {
 		Contact updatedContact = new Contact(this.id, this.firstName, this.lastName, this.dateOfBirth, this.phoneNumber, address);
 		return updatedContact;
 	}

@@ -1,7 +1,5 @@
 package com.krisztinanmth.phonebook.models;
 
-import java.util.Objects;
-
 public class Address {
 
   private String country;

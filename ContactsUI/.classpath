@@ -8,6 +8,6 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface_3.15.0.v20181123-1505.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.osgi_3.13.200.v20181130-2106.jar"/>
 	<classpathentry kind="lib" path="/Users/krisztinka/Desktop/phoneBookApp/phoneBook/ContactsUI/lib/swt.jar"/>
-	<classpathentry kind="lib" path="/Users/krisztinka/Desktop/phoneBookApp/phoneBook/ContactsUI/lib/phonebook-0.0.6-SNAPSHOT-all.jar"/>
+	<classpathentry kind="lib" path="/Users/krisztinka/Desktop/phoneBookApp/phoneBook/ContactsUI/lib/phonebook-0.0.7-SNAPSHOT-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

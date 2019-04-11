@@ -4,8 +4,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.naming.NameNotFoundException;
@@ -33,7 +35,7 @@ public class JSONContactService implements ContactService {
 
 	private JSONParser parser;
 	private String jsonPath;
-	private List<Contact> contacts = new ArrayList<Contact>();
+	private Set<Contact> contacts = new HashSet<Contact>();
 
 	@Autowired
 	public JSONContactService(String jsonPath) {
@@ -42,10 +44,7 @@ public class JSONContactService implements ContactService {
 		this.contacts = readFromJSON();
 	}
 	
-	public JSONContactService() {
-	}
-	
-	public List<Contact> readFromJSON() {
+	public Set<Contact> readFromJSON() {
 		Object object;
 		try {
 			object = parser.parse(new FileReader(jsonPath));
@@ -83,7 +82,7 @@ public class JSONContactService implements ContactService {
 		return new Contact(firstName, lastName, dateOfBirth, phoneNumber, addresses);
 	}
 	
-	public void writeListOfContactsIntoJSON(List<Contact> newContacts) {
+	public void writeSetOfContactsIntoJSON(Set<Contact> newContacts) {
 		String json = new Gson().toJson(newContacts);
 		try (FileWriter file = new FileWriter(jsonPath)) {
 			file.write(json);
@@ -103,15 +102,21 @@ public class JSONContactService implements ContactService {
 	}
 
 	@Override
-	public Optional<Contact> findContactById(String id) {
+	public Optional<Contact> findById(String id) {
 		return this.contacts.stream().filter(c -> c.getId().equals(id)).findFirst();
+//		Optional<Contact> optContact 
+//		for (Contact contact : this.contacts) {
+//			if (contact.getId().equals(id)) {
+//				
+//			}
+//		}
 	}
 
 	@Override
 	public void createNewContact(Contact contact) {
 		if (contact != null) {
 			this.contacts.add(contact);
-			writeListOfContactsIntoJSON(this.contacts);
+			writeSetOfContactsIntoJSON(this.contacts);
 		}
 	}
 
@@ -124,18 +129,18 @@ public class JSONContactService implements ContactService {
 				this.contacts.add(contact);
 			}
 		}
-		writeListOfContactsIntoJSON(this.contacts);
+		writeSetOfContactsIntoJSON(this.contacts);
 	}
 
 	@Override
 	public void deleteContact(String id) {
 		if (id != null) {
-			Optional<Contact> findContactById = findContactById(id);
+			Optional<Contact> findContactById = findById(id);
 			if (findContactById.isPresent()) {
-				this.contacts.remove(findContactById.get());
+				this.contacts.removeIf(c -> c.getId().equals(id));
 			}
 		}
-		writeListOfContactsIntoJSON(this.contacts);
+		writeSetOfContactsIntoJSON(this.contacts);
 	}
 	
 	@Override
@@ -148,16 +153,21 @@ public class JSONContactService implements ContactService {
 				this.contacts.remove(contactsToDelete.get(i));
 			} 
 		}
-		writeListOfContactsIntoJSON(this.contacts);
+		writeSetOfContactsIntoJSON(this.contacts);
 	}
 	
 	@Override
 	public void updateContact(String id, ContactUpdate contactUpdate) {
-		Contact contact = findContactById(id).get();
-		Contact updatedContact = contactUpdate.getUpdatedContact(contact, contactUpdate);
-		this.contacts.remove(contact);
-		this.contacts.add(updatedContact);
-		writeListOfContactsIntoJSON(this.contacts);
+		Optional<Contact> optContact = findById(id);
+		if (optContact.isPresent()) {
+			Contact contact = optContact.get();
+			Contact updatedContact = contactUpdate.getUpdatedContact(contact, contactUpdate);
+			this.contacts.removeIf(c -> c.getId().equals(id));
+			this.contacts.add(updatedContact);
+			writeSetOfContactsIntoJSON(this.contacts);
+		} else {
+			System.err.println("No contact was found with given id");
+		}
 	}
 			
 	@Override
@@ -192,7 +202,7 @@ public class JSONContactService implements ContactService {
 	}
 	
 	@Override
-	public Contact findContactByName(String name) {
+	public Contact findByName(String name) {
 		if (name == null || name.length() == 0)
 			try {
 				throw new NameNotFoundException("No name was provided.");
@@ -275,7 +285,7 @@ public class JSONContactService implements ContactService {
 	}
 
 	@Override
-	public List<Contact> getAllContacts() {
+	public Set<Contact> getAllContacts() {
 		return this.contacts;
 	}
 

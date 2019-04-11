@@ -8,6 +8,8 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
@@ -31,13 +33,13 @@ public class JSONContactServiceTest {
 	public JSONContactServiceTest() {
 		contactService = new JSONContactService("src/main/resources/contacts.json");
 	}
-
+	
 	@Test
 	public void createContact_with_Null() {
-		int sizeOfContactList = contactService.getAllContacts().size();
+		int sizeOfContactsSet = contactService.getAllContacts().size();
 		contactService.createNewContact(null);
-		List<Contact> contactList = contactService.getAllContacts();
-		assertThat(contactList, hasSize(sizeOfContactList));
+		Set<Contact> contactList = contactService.getAllContacts();
+		assertThat(contactList, hasSize(sizeOfContactsSet));
 	}
 	
 	@Test
@@ -48,11 +50,11 @@ public class JSONContactServiceTest {
 		List<Address> address = new ArrayList<>();
 		address.add(ad);
 		Contact contact = new Contact("Suzie", "Doe", "1988-12-11", phoneNums, address);
-		List<Contact> contactList = contactService.getAllContacts();
-		int sizeOfList = contactList.size();
+		Set<Contact> contactsSet = contactService.getAllContacts();
+		int sizeOfList = contactsSet.size();
 		contactService.createNewContact(contact);
-		contactList = contactService.getAllContacts();
-		assertThat(contactList, hasSize(sizeOfList + 1));
+		contactsSet = contactService.getAllContacts();
+		assertThat(contactsSet, hasSize(sizeOfList + 1));
 	}
 
 	@Test(expected = ContactNotProvidedException.class)
@@ -62,25 +64,25 @@ public class JSONContactServiceTest {
 	
 	@Test
 	public void deleteContact_with_Null() {
-		int cListSize = contactService.getAllContacts().size();
+		int contactsSetSize = contactService.getAllContacts().size();
 		contactService.deleteContact(null);
-		List<Contact> contactList = contactService.getAllContacts();
-		assertThat(contactList, hasSize(cListSize));
+		Set<Contact> contactList = contactService.getAllContacts();
+		assertThat(contactList, hasSize(contactsSetSize));
 	}
 	
 	@Test
 	public void deleteContact_with_EmptyStringId() {
-		int cListSize = contactService.getAllContacts().size();
+		int cSetSize = contactService.getAllContacts().size();
 		contactService.deleteContact("");
-		List<Contact> contactList = contactService.getAllContacts();
-		assertThat(contactList, hasSize(cListSize));
+		Set<Contact> contactList = contactService.getAllContacts();
+		assertThat(contactList, hasSize(cSetSize));
 	}
 	
 	@Test
 	public void deleteContact_with_ExistingContact() {
-		int numberOfContactsInList = contactService.getAllContacts().size();
-		contactService.deleteContact(contactService.findContactByName("Gerhard Fleming").getId());
-		assertThat(contactService.getAllContacts(), hasSize(numberOfContactsInList - 1));
+		int cSetSize = contactService.getAllContacts().size();
+		contactService.deleteContact(contactService.findByName("Gerhard Fleming").getId());
+		assertThat(contactService.getAllContacts(), hasSize(cSetSize - 1));
 	}
 
 	@Test(expected = ContactNotProvidedException.class)
@@ -91,40 +93,46 @@ public class JSONContactServiceTest {
 	@Test
 	public void updateContact_withContactUpdate_ChangeFirstName() {
 		Contact contact = contactService.findByLastName("Wilkinson").get(0);
-		List<Contact> contactList = contactService.getAllContacts();
 		ContactUpdate contactUpdate = new ContactUpdate(contact);
 		contactUpdate.setFirstName("Lilla");
 		contactService.updateContact(contact.getId(), contactUpdate);
 		
-		assertEquals("Lilla", contactList.get(contactList.size() - 1).getFirstName());
+		Optional<Contact> optContact = contactService.findById(contact.getId());
+		if (optContact.isPresent()) {
+			Contact updatedContact = optContact.get();
+			assertEquals("Lilla", updatedContact.getFirstName());
+		}
 	}
 	
 	@Test
 	public void updateContact_withContactUpdate_ChangeAllFields() {
 		Contact contact = contactService.findByFirstName("Daniel").get(0);
-		List<Contact> contactList = contactService.getAllContacts();
-		int sizeOfList = contactList.size();
 		
 		ContactUpdate contactUpdate = new ContactUpdate(contact);
 		contactUpdate.setFirstName("TestFirst");
 		contactUpdate.setLastName("TestLast");
-		contactUpdate.setDateOfBirth("TTTT-TT-TT");
+		contactUpdate.setDateOfBirth("1999-11-11");
 		
 		List<String> phoneNum = new ArrayList<String>();
-		phoneNum.add("TEST_000");
+		phoneNum.add("555_000");
 		contactUpdate.setPhoneNumber(phoneNum);
 		
 		List<Address> addList = new ArrayList<Address>();
-		Address ad = new Address("testCountry", "testZip", "testCity", "testStreet");
+		Address ad = new Address("testCountry", "123", "testCity", "testStreet");
 		addList.add(ad);
 		contactUpdate.setAddress(addList);
 		
 		contactService.updateContact(contact.getId(), contactUpdate);
-		assertEquals("TestFirst", contactList.get(sizeOfList - 1).getFirstName());
-		assertEquals("TestLast", contactList.get(sizeOfList - 1).getLastName());
-		assertEquals("TTTT-TT-TT", contactList.get(sizeOfList - 1).getDateOfBirth());
-		assertEquals(phoneNum, contactList.get(sizeOfList - 1).getPhoneNumber());
-		assertEquals(addList, contactList.get(sizeOfList - 1).getAddress());
+		
+		Optional<Contact> optContact = contactService.findById(contact.getId());
+		if (optContact.isPresent()) {
+			Contact updatedContact = optContact.get();
+			assertEquals("TestFirst", updatedContact.getFirstName());
+			assertEquals("TestLast", updatedContact.getLastName());
+			assertEquals("1999-11-11", updatedContact.getDateOfBirth());
+			assertEquals(phoneNum, updatedContact.getPhoneNumber());
+			assertEquals(addList, updatedContact.getAddress());
+		}
 	}
 	
 	@Test
