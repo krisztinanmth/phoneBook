@@ -104,12 +104,6 @@ public class JSONContactService implements ContactService {
 	@Override
 	public Optional<Contact> findById(String id) {
 		return this.contacts.stream().filter(c -> c.getId().equals(id)).findFirst();
-//		Optional<Contact> optContact 
-//		for (Contact contact : this.contacts) {
-//			if (contact.getId().equals(id)) {
-//				
-//			}
-//		}
 	}
 
 	@Override
